@@ -35,9 +35,20 @@ h1,h2{margin:0;font-weight:500;line-height:1.3}
 .split__photo{position:relative;flex:0 0 auto;height:56svh;
   background-position:center 30%;background-size:cover;background-repeat:no-repeat}
 .split__photo::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(78,62,60,.04) 0%,rgba(78,62,60,.28) 58%,rgba(78,62,60,.60) 100%)}
+  background:linear-gradient(180deg,rgba(78,62,60,.03) 0%,rgba(78,62,60,.16) 58%,rgba(78,62,60,.40) 100%)}
 .split__panel{position:relative;flex:1 1 auto;overflow:hidden;z-index:1;
   background:linear-gradient(175deg,#E9F0F7 0%,#FAEFEC 42%,var(--cream) 78%)}
+
+/* ---------- ลูกเล่นตอนเข้าแต่ละหน้า ---------- */
+@keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+#cover .overlay .script{animation:riseIn .9s ease both}
+#cover .date{animation:riseIn .8s ease .15s both}
+#cover .rule{animation:riseIn .8s ease .3s both}
+#cover .lede{animation:riseIn .8s ease .42s both}
+#cover .btn{animation:riseIn .8s ease .54s both}
+#rsvp-view.on .overlay .caps{animation:riseIn .7s ease both}
+#rsvp-view.on .sheet{animation:riseIn .6s ease .12s both}
+.done:not(.hide){animation:riseIn .6s ease both}
 
 .photo--cover{
   background-image:url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/cover.webp");
