@@ -113,8 +113,8 @@ rsvp/
 | Cormorant Garamond | เนื้อความภาษาอังกฤษ |
 | IBM Plex Sans Thai | ทุกอย่างในหน้าฟอร์ม |
 
-**Motion** มีได้จุดเดียวตอนโหลดหน้าปก และต้องเคารพ `prefers-reduced-motion`
-ห้ามใส่ fade-in ตอน scroll
+**Motion** — อัปเดตแล้ว (เจ้าของขอเพิ่มลูกเล่นทีหลัง เดิมกฎนี้เคยจำกัดไว้จุดเดียว): ตอนนี้มี fade+rise-in (CSS `@keyframes riseIn`, opacity/transform เท่านั้น ไม่ใช้ transition ข้าม `display:none`) เล่นตอน (1) โหลดหน้าปกครั้งแรก (2) กด RSVP เข้าหน้าฟอร์ม/กด back กลับหน้าปก (3) ส่งฟอร์มสำเร็จเข้าหน้า Thank you — ทั้งหมดยังต้องเคารพ `prefers-reduced-motion` เหมือนเดิม (มี media query ปิด animation ทั้งหมดอยู่ท้ายไฟล์ CSS แล้ว)
+ห้ามใส่ fade-in ตอน scroll (ข้อนี้ยังคงอยู่ — ลูกเล่นทั้งหมดผูกกับการเปลี่ยนหน้า/โหลดหน้าเท่านั้น ไม่ผูกกับ scroll position)
 
 ---
 
