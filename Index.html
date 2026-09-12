@@ -165,6 +165,11 @@ input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:
 .done .done-msg{color:var(--ink-soft);font-size:15.5px;margin:0;line-height:1.9}
 .done .venue{margin:16px 0 0}
 .done .hint{margin-top:14px}
+.done__restart-wrap{text-align:right;margin-top:28px}
+.done__restart{background:none;border:none;border-bottom:1px solid var(--gold);
+  font-family:"Cinzel",serif;font-size:12px;letter-spacing:.1em;color:var(--gold-deep);
+  cursor:pointer;padding:6px 0;transition:color .2s,border-color .2s}
+.done__restart:hover,.done__restart:focus-visible{color:var(--gold)}
 
 /* ---------- จอใหญ่ ---------- */
 @media (min-width:900px){
@@ -243,9 +248,8 @@ input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:
   <div class="split__panel">
 
     <div class="sheet">
-      <button class="back" id="back">← ย้อนกลับ</button>
-
       <form id="rsvp">
+        <button type="button" class="back" id="back">← ย้อนกลับ</button>
         <h2>RSVP</h2>
         <p class="sheet__sub">ข้อมูลนี้เราจะใช้จัดทำการ์ดเชิญฉบับจริง</p>
 
@@ -310,6 +314,9 @@ input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:
       <div class="done hide" id="done">
         <span class="script">Thank you</span>
         <div class="done-msg" id="done-msg">บันทึกคำตอบของท่านเรียบร้อยแล้ว<br>แล้วพบกันวันที่ 27 ธันวาคมนี้</div>
+        <div class="done__restart-wrap">
+          <button type="button" class="done__restart" id="restart">กลับหน้าแรก →</button>
+        </div>
       </div>
     </div>
   </div>
@@ -323,6 +330,18 @@ document.getElementById('go').onclick = function(){
   cover.style.display = 'none'; view.classList.add('on'); window.scrollTo(0,0);
 };
 document.getElementById('back').onclick = function(){
+  view.classList.remove('on'); cover.style.display = ''; window.scrollTo(0,0);
+};
+document.getElementById('restart').onclick = function(){
+  document.getElementById('rsvp').reset();
+  document.getElementById('grp-attending').style.display = '';
+  document.getElementById('grp-addr').style.display = '';
+  document.getElementById('msg').textContent = '';
+  var sendBtn = document.getElementById('send');
+  sendBtn.disabled = false; sendBtn.textContent = 'ส่งคำตอบ';
+  document.querySelector('#rsvp-view .split__photo').classList.replace('photo--thankyou', 'photo--rsvp');
+  document.getElementById('done').classList.add('hide');
+  document.getElementById('rsvp').classList.remove('hide');
   view.classList.remove('on'); cover.style.display = ''; window.scrollTo(0,0);
 };
 
