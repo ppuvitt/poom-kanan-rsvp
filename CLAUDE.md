@@ -140,30 +140,41 @@ rsvp/
 ## รูปภาพและเพลง
 
 ### รูป
-- ใช้ 2 รูป: รูปหน้าปก และรูปหน้าฟอร์ม (แสดงเฉพาะบนเดสก์ท็อป)
+- ใช้ 3 รูป: รูปหน้าปก (`cover`), รูปหน้าฟอร์ม (`rsvp`, แสดงเฉพาะบนเดสก์ท็อป), รูปหน้า Thank you (`thankyou`, แสดงเฉพาะบนเดสก์ท็อปเหมือนกัน — สลับมาจากรูป `rsvp` ตอนส่งฟอร์มสำเร็จ)
 - ย่อกว้างสุด 1200px แปลง WebP **ไฟล์ละไม่เกิน 250KB** เตรียม JPG สำรอง
 - ใส่ `width`/`height` ในแท็กเสมอ กัน layout กระตุก
 - **น้ำหนักหน้าเว็บรวมไม่เกิน 1.2MB** ไม่นับเพลง ถ้าเกินให้ตัดรูป
 
-### สูตรย่อรูป — ทำแล้วได้ผล เจอปัญหาเบลอมาแล้วครั้งหนึ่ง อ่านก่อนเปลี่ยนรูปใหม่
+### สูตรย่อรูป — ทำแล้วได้ผล เจอปัญหาเบลอ+รูปแนวตั้งมาแล้ว อ่านก่อนเปลี่ยนรูปใหม่
 
-ต้นฉบับสูงมาก (~5000px+ กว้าง) เก็บไว้ใน `pic/` (gitignore ไว้ ไม่ commit) ผ่าน `assets-src/` เป็นไฟล์ที่ประมวลผลแล้วเท่านั้น
+ต้นฉบับสูงมาก (~5000px+) เก็บไว้ใน `pic/` (gitignore ไว้ ไม่ commit) ผ่าน `assets-src/` เป็นไฟล์ที่ประมวลผลแล้วเท่านั้น
+
+**ต้นฉบับไม่ได้เป็นแนวนอนเสมอไป** (เจอรูปแนวตั้งมาแล้วรอบหนึ่ง) — ห้ามใช้ `sips -Z` (ย่อตามด้านที่ยาวที่สุด) เพราะรูปแนวตั้งจะโดนย่อตามความสูงแทนความกว้าง ทำให้ไฟล์กว้างแคบผิดปกติ **ให้ใช้ `sips --resampleWidth` เสมอ** เพื่อยึดความกว้างเป็นหลักไม่ว่ารูปจะแนวไหน:
 
 ```bash
-# 1) รูปมือถือ + เดสก์ท็อปจอทั่วไป (1x) — กว้าง 1200px ตามเพดาน 250KB
-sips -Z 1200 pic/pic_01.JPG --out assets-src/cover-src.jpg
+# 1) มือถือ + เดสก์ท็อปจอทั่วไป (1x) — กว้าง 1200px ตามเพดาน 250KB
+sips --resampleWidth 1200 pic/pic_01.JPG --out assets-src/cover-src.jpg
 cwebp -q 78 assets-src/cover-src.jpg -o assets-src/cover.webp
 sips -s format jpeg -s formatOptions 78 assets-src/cover-src.jpg --out assets-src/cover.jpg   # JPG สำรอง
 
-# 2) รูปเดสก์ท็อป (2x) — กว้าง 2200px ใช้แก้เบลอบนจอเดสก์ท็อป
-sips -Z 2200 pic/pic_01.JPG --out assets-src/cover-2x-src.jpg
+# 2) เดสก์ท็อป (2x) — กว้าง 2200px ใช้แก้เบลอบนจอเดสก์ท็อป
+sips --resampleWidth 2200 pic/pic_01.JPG --out assets-src/cover-2x-src.jpg
 cwebp -q 72 assets-src/cover-2x-src.jpg -o assets-src/cover@2x.webp
 ```
-ทำซ้ำแบบเดียวกันกับ `pic_02.JPG` → `rsvp.webp`/`rsvp.jpg`/`rsvp@2x.webp`
+ทำซ้ำแบบเดียวกันกับรูปอื่น → `rsvp.webp`/`rsvp.jpg`/`rsvp@2x.webp` และ `thankyou.webp`/`thankyou.jpg`/`thankyou@2x.webp` (เปลี่ยนแค่ชื่อไฟล์นำเข้า/ส่งออก)
 
 **ทำไมต้องมี 2 ขนาด** — เคยลองใช้ `image-set()` ให้เบราว์เซอร์เลือกเองตาม pixel density (`1x`/`2x`) แล้วจอ PC จอใหญ่ที่ไม่ใช่ Retina (DPR=1) ยังเบลออยู่ดี เพราะ `image-set()` เลือกไฟล์จาก **ความหนาแน่นพิกเซลของจอ อย่างเดียว ไม่สนความกว้างของกล่องที่แสดงจริง** ทางแก้คือ override `background-image` ของ `.photo--cover`/`.photo--rsvp` ไว้ **ในเบรกพอยต์ `@media (min-width:900px)` เดิม** ให้ใช้ไฟล์ `@2x` (2200px) ตรงๆ เป็นค่าเริ่มต้นของเดสก์ท็อปทุกจอ ไม่ต้องพึ่ง DPR — วิธีนี้ทำให้ไฟล์ desktop tier (~350KB/~150KB) **เกินเพดาน 250KB ที่ตั้งไว้ข้างบนโดยตั้งใจ** แต่กระทบเฉพาะจอเดสก์ท็อป มือถือ (ที่เป็นกลุ่มเป้าหมายจริงจากไลน์) ยังโหลดไฟล์ 1200px/≤250KB เท่าเดิมทุกประการ — ถ้าจะเปลี่ยนรูปใหม่ ทำสูตรนี้ซ้ำแล้วอัปโหลดทั้ง 3 ไฟล์ (`.webp` มือถือ, `.jpg` สำรอง, `@2x.webp` เดสก์ท็อป) ต่อรูป
 
 โฮสต์ผ่าน jsDelivr จาก GitHub repo `ppuvitt/poom-kanan-rsvp` (public) พาธ `assets-src/<ชื่อไฟล์>` — URL รูปแบบ `https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/<ชื่อไฟล์>` (ต้อง `git push` ก่อน jsDelivr ถึงจะเห็นไฟล์ใหม่)
+
+**ถ้าเปลี่ยนรูปแต่ใช้ชื่อไฟล์เดิม (เช่นเปลี่ยนรูป `rsvp.webp` เป็นรูปใหม่) jsDelivr แคชไฟล์เดิมไว้ที่ URL เดิม อาจยังเห็นรูปเก่าอยู่ได้ถึงหลักวัน** ต้อง purge cache หลัง push ทุกครั้งที่เจอกรณีนี้ (ไฟล์ชื่อใหม่ไม่ต้อง purge):
+```bash
+curl "https://purge.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/<ชื่อไฟล์ที่เปลี่ยน>"
+```
+แล้วเช็คด้วย `curl -sI` ว่า `content-length` ตรงกับไฟล์ใหม่จริงก่อนบอกว่าเสร็จ
+
+### หน้า Thank you มีรูปพื้นหลังของตัวเอง (`.photo--thankyou`)
+สลับจาก `.photo--rsvp` เป็น `.photo--thankyou` ด้วย JS ตอน `submitRsvp` สำเร็จ (`classList.replace('photo--rsvp','photo--thankyou')`) — เพื่อให้ animation `slideInRight` เล่นซ้ำตอนสลับรูป **animation ต้องผูกกับ selector เฉพาะคลาสรูป** (`#rsvp-view.on .photo--rsvp` / `#rsvp-view.on .photo--thankyou` แยกกัน) ห้ามผูกกับ `.split__photo` เฉยๆ เพราะแบบนั้น animation จะไม่ retrigger ตอนสลับคลาส (คลาสยังแมตช์ selector เดิมต่อเนื่อง ไม่มีการเปลี่ยนค่า computed animation-name)
 
 ### เพลง
 - **autoplay ที่มีเสียงถูกเบราว์เซอร์มือถือบล็อกทั้งหมด ห้ามพยายามหลบ** ถ้าเขียนโค้ดที่พยายาม autoplay แล้วอ้างว่าใช้ได้ ถือว่าผิด
