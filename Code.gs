@@ -2,6 +2,7 @@ var SHEET_NAME = 'RSVP';
 var COLUMNS = [
   'เวลาบันทึก',
   'ชื่อของท่าน',
+  'เป็นแขกฝั่งเจ้าบ่าวหรือเจ้าสาว',
   'ท่านจะมาร่วมงานหรือไม่',
   'มาด้วยกันกี่ท่าน',
   'ชื่อที่ต้องการให้ปรากฏบนการ์ด',
@@ -42,10 +43,14 @@ function submitRsvp(form) {
   }
 
   var name = String(form.name || '').trim().slice(0, 100);
+  var side = String(form.side || '').trim().slice(0, 20);
   var attend = String(form.attend || '').trim().slice(0, 20);
 
   if (name.length < 2) {
     throw new Error('กรุณากรอกชื่อของท่าน');
+  }
+  if (['ฝั่งเจ้าบ่าว', 'ฝั่งเจ้าสาว'].indexOf(side) === -1) {
+    throw new Error('กรุณาเลือกฝั่งแขก');
   }
   if (['สะดวกร่วมงาน', 'ไม่สะดวกร่วมงาน'].indexOf(attend) === -1) {
     throw new Error('กรุณาเลือกสถานะการเข้าร่วม');
@@ -88,7 +93,7 @@ function submitRsvp(form) {
   lock.waitLock(10000);
   try {
     var sheet = getSheet_();
-    sheet.appendRow([new Date(), name, attend, count, cardname, deliver, addr, tel, wish]);
+    sheet.appendRow([new Date(), name, side, attend, count, cardname, deliver, addr, tel, wish]);
   } finally {
     lock.releaseLock();
   }
