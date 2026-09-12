@@ -47,6 +47,8 @@ h1,h2{margin:0;font-weight:500;line-height:1.3}
 #cover .rule{animation:riseIn .8s ease .3s both}
 #cover .lede{animation:riseIn .8s ease .42s both}
 #cover .btn{animation:riseIn .8s ease .54s both}
+#cover .venue{animation:riseIn .8s ease .64s both}
+#cover .dresscode{animation:riseIn .8s ease .74s both}
 #rsvp-view.on .photo--rsvp{animation:slideInRight .7s cubic-bezier(.22,.61,.36,1) both}
 #rsvp-view.on .photo--thankyou{animation:slideInRight .7s cubic-bezier(.22,.61,.36,1) both}
 #rsvp-view.on .overlay .caps{animation:riseIn .7s ease both}
@@ -98,6 +100,21 @@ h1,h2{margin:0;font-weight:500;line-height:1.3}
   padding:15px 42px;border-radius:999px;cursor:pointer;transition:background .25s,color .25s}
 .btn:hover,.btn:focus-visible{background:var(--gold);color:#fff}
 .btn:focus-visible{outline:2px solid var(--gold-deep);outline-offset:3px}
+
+.eyebrow{font-family:"Cinzel",serif;font-size:11px;letter-spacing:.22em;color:var(--sky-deep);margin:0}
+.rule--sm{width:64px;margin:34px auto 26px;opacity:.5}
+
+.venue{margin-bottom:30px}
+.venue__name{font-size:16.5px;color:var(--ink);margin:7px 0 12px}
+.venue__link{display:inline-flex;align-items:center;gap:6px;font-family:"Cinzel",serif;
+  font-size:12px;letter-spacing:.1em;color:var(--gold-deep);text-decoration:none;
+  border-bottom:1px solid var(--gold);padding-bottom:3px;transition:color .2s,border-color .2s}
+.venue__link:hover,.venue__link:focus-visible{color:var(--gold);border-color:var(--gold)}
+.venue__link svg{flex:none}
+
+.swatches{display:flex;justify-content:center;gap:8px;margin:12px 0 14px}
+.swatches span{width:24px;height:24px;border-radius:50%;box-shadow:0 0 0 1px rgba(78,62,60,.15) inset}
+.dresscode__note{font-size:13.5px;color:var(--ink-soft);max-width:290px;margin:0 auto;font-style:italic;line-height:1.65}
 
 /* ---------- ปุ่มเพลง ---------- */
 #sound{position:fixed;top:14px;right:14px;z-index:40;width:40px;height:40px;border-radius:50%;
@@ -186,6 +203,30 @@ input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:
     <div class="rule"></div>
     <p class="lede">We're finding out who can join us for our big day, and we would love yours to be on the list.</p>
     <div><button class="btn" id="go">RSVP</button></div>
+
+    <div class="rule rule--sm"></div>
+
+    <div class="venue">
+      <p class="eyebrow">Venue</p>
+      <p class="venue__name">Ava Trivi Studio</p>
+      <a class="venue__link" href="https://www.google.com/maps/place/Ava+Trivi+Studio/@13.9176096,100.446719,1069m/data=!3m2!1e3!4b1!4m6!3m5!1s0x30e285caf7b4da1b:0xf0eccb2dcce3cc8d!8m2!3d13.9176044!4d100.4492939!16s%2Fg%2F11g2kl9f6m!5m1!1e1?entry=ttu&amp;g_ep=EgoyMDI2MDkwOS4wIKXMDSoASAFQAw%3D%3D">
+        View on Google Maps
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+      </a>
+    </div>
+
+    <div class="dresscode">
+      <p class="eyebrow">Dress Code</p>
+      <div class="swatches" aria-hidden="true">
+        <span style="background:#E6D9C8"></span>
+        <span style="background:#D9B69A"></span>
+        <span style="background:#D8B6AD"></span>
+        <span style="background:#C99A94"></span>
+        <span style="background:#A87F85"></span>
+        <span style="background:#876051"></span>
+      </div>
+      <p class="dresscode__note">Warm neutrals &amp; dusty rose — we'd love to see you in these earthy, romantic tones.</p>
+    </div>
   </div>
 </section>
 

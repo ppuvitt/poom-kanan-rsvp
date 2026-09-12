@@ -6,12 +6,13 @@
 เป้าหมายเดียว: **รู้ว่าใครมา มากี่คน จะส่งการ์ดจริงไปที่ไหน และพิมพ์ชื่อว่าอะไร**
 
 การ์ดฉบับจริงเป็นกระดาษ ทำทีหลัง คนละงานกัน
-หน้านี้ **ไม่ต้องมี** กำหนดการ แผนที่ แกลเลอรี นับถอยหลัง QR ให้ของขวัญ — ถ้าเผลอใส่ ให้ตัดออก
+หน้านี้ **ไม่ต้องมี** กำหนดการ/ตารางเวลางาน แกลเลอรี นับถอยหลัง QR ให้ของขวัญ — ถ้าเผลอใส่ ให้ตัดออก
+**ข้อยกเว้นที่เจ้าของขอเพิ่มเอง (ของจริง ไม่ใช่เดา):** ลิงก์ Google Maps ไปสถานที่จัดงาน + dress code แบบสวอตช์สี — อยู่บนหน้าปก ใต้ปุ่ม RSVP ไม่ใช่กำหนดการเต็มรูปแบบ
 
 - คู่บ่าวสาว: **Poom & Kanan** (ไทย: ภูมิ & คะแนน)
 - วันงาน: **วันอาทิตย์ที่ 27 ธันวาคม 2569 / 27 December 2026**
 - แขกประมาณ 200 คน
-- สถานที่และกำหนดการ **ยังไม่สรุป** อย่าใส่ของปลอมลงไป
+- สถานที่: **Ava Trivi Studio** (มีลิงก์ Google Maps ในหน้าปกแล้ว) — ส่วนกำหนดการ/เวลางาน **ยังไม่สรุป** อย่าใส่ของปลอมลงไป
 
 ---
 
@@ -19,14 +20,14 @@
 
 ตรวจไฟล์จริงในโฟลเดอร์ก่อนเริ่มงานทุกครั้ง อย่าสมมติว่าทำไปถึงไหนแล้วจากเอกสารนี้อย่างเดียว ตอนนี้ (ล่าสุด):
 
-- มี `Code.gs` และ `appsscript.json` แล้ว (`timeZone: Asia/Bangkok`, `webapp.access: ANYONE_ANONYMOUS`) — `submitRsvp` หุ้ม `LockService`, `.slice()` ทุกฟิลด์, ตรวจ honeypot (`#hp`) แล้ว แต่ **อ่าน Sheet ID จาก Script Properties (`SHEET_ID`) เท่านั้น ไม่ได้ hardcode ไว้ในโค้ด** — ต้องไปตั้งค่าใน Apps Script editor เองก่อนใช้งานได้จริง (Project Settings → Script Properties)
-- `Index.html` ต่อ `google.script.run.submitRsvp(...)` จริงแล้ว มี `<base target="_top">` และมี honeypot field แล้ว
-- รูปหน้าปก/หน้าฟอร์มอยู่ใน `assets-src/` แล้ว (`cover.webp` ~155KB, `rsvp.webp` ~58KB, ย่อ 1200px กว้าง มี `.jpg` สำรอง) แต่ **ใน `Index.html` ยังเป็น `<<TODO: ...>>` อยู่** เพราะยังไม่มี URL ของ GitHub repo + jsDelivr มาแทน (ห้ามเดา ตามกฎ)
-- เป็น git repo แล้ว (commit แรกลงแล้ว) มี `.gitignore` (กัน `.clasp.json`, `.clasprc.json`, `pic/`) และ `.claspignore` (อนุญาตแค่ `appsscript.json`, `Code.gs`, `Index.html` ให้ clasp push) — ยังไม่ได้ตั้ง remote/push ขึ้น GitHub
-- สร้าง Apps Script standalone project ใหม่แล้วผ่าน `clasp create` และ `clasp push --force` สำเร็จ (3 ไฟล์) — **ข้อควรระวัง: `clasp create` เขียนทับ `appsscript.json` เป็นค่า default `America/New_York` แบบไม่ถาม ต้องเซ็ตกลับเป็น `Asia/Bangkok` ทุกครั้งหลังรัน `clasp create`** (เจอเคสนี้จริงแล้วรอบนี้)
-- **ยังไม่ได้ตั้ง Script Property `SHEET_ID`** ใน Apps Script editor เลย ถ้ายังไม่ตั้ง `submitRsvp` จะ throw error ทันที
-- ปุ่มเพลง (`#sound`) มีแค่ตรรกะ toggle ไอคอนสองปุ่ม SVG **ยังไม่มี `<audio>` element และยังไม่เล่นเพลงจริง**
-- ยังไม่ได้ทดสอบ end-to-end จริงในเบราว์เซอร์ (ยังไม่ได้ `clasp create-deployment` — ห้ามรันเองโดยไม่ถาม) — ดู Definition of done ก่อนสรุปว่าใช้งานได้
+- **ใช้งานได้จริงแล้วแบบ end-to-end** — `Code.gs`/`appsscript.json` เสร็จ, ต่อ Sheet จริงแล้ว, ผ่านการทดสอบส่งฟอร์มจริงหลายเคส (ชื่อว่าง/ส่งไปรษณีย์/ไม่สะดวกร่วมงาน) เวลาบันทึกเป็นเวลาไทยถูกต้อง — ดูหัวข้อ Definition of done ว่าเช็คข้อไหนแล้วบ้าง ก่อนบอกว่า "เสร็จ" ทุกข้อ
+- เป็น git repo แล้ว push ขึ้น GitHub repo สาธารณะ `ppuvitt/poom-kanan-rsvp` แล้ว (`main` branch) — ทุกครั้งที่แก้ต้อง `git push` แล้ว `clasp push` แล้ว `clasp create-deployment -i <deploymentId>` ต่อ (ดู deployment ID ปัจจุบันจาก `clasp list-deployments` ห้ามสร้าง deployment ใหม่ซ้ำ ให้ redeploy ตัวเดิม)
+- `gh` CLI ติดตั้งและ login ไว้แล้ว (`gh auth setup-git` ผูกกับ git แล้ว) ใช้ push ได้เลยไม่ต้อง login ใหม่
+- Script Property `SHEET_ID` ตั้งค่าไว้แล้วใน Apps Script editor (ไม่ได้เก็บค่าไว้ในไฟล์ใดๆ ตามกฎ — ถ้าต้องรู้ค่าจริงต้องถามเจ้าของหรือเข้าไปดูเองในหน้า Script Properties)
+- รูปที่ใช้จริงตอนนี้: `cover` (จาก pic_01), `rsvp` (จาก pic_02 รูปที่ 2 ปัจจุบัน), `thankyou` (จาก pic_03 ซึ่งคือรูป rsvp ตัวเก่า) ครบทั้ง 1x/2x/jpg สำรอง อยู่ใน `assets-src/` และขึ้น jsDelivr แล้วจริง (ดูหัวข้อรูปภาพด้านล่างเรื่องแคช 2 ชั้นก่อนเปลี่ยนรูปอีก)
+- มี animation แบบ fade+rise-in และ slide-in-from-right แล้ว (ดูหัวข้อ Motion) — ปุ่มเพลง (`#sound`) ยังมีแค่ตรรกะ toggle ไอคอน **ยังไม่มี `<audio>` element และยังไม่เล่นเพลงจริง** เพราะยังไม่มีไฟล์เพลง
+- หน้าปกมีลิงก์ Google Maps (Ava Trivi Studio) และ dress code แบบสวอตช์สีแล้ว (ดูหัวข้อด้านบน)
+- **ยังไม่เคยทดสอบเปิดจาก LINE in-app browser บนมือถือจริง**, ยังไม่วัดน้ำหนักหน้าเว็บจาก Network tab จริง, ยังไม่เช็ค console error — อย่าข้ามข้อพวกนี้ใน Definition of done
 
 ---
 
@@ -268,11 +269,10 @@ clasp tail-logs
 - ชื่อ-นามสกุลเต็มของ Poom และ Kanan
 - ไฟล์ PNG ลายกุหลาบมุม พื้นหลังโปร่ง
 - ไฟล์เพลงบรรเลง royalty-free
-- URL ของ GitHub repo ที่เก็บ assets (ต้องได้ก่อนแทนที่ `<<TODO: ...>>` ใน `.photo--cover`/`.photo--rsvp` ด้วย URL jsDelivr จริง)
 - กำหนดวันปิดรับคำตอบ (แนะนำต้นพฤศจิกายน 2569 เผื่อเวลาพิมพ์และส่ง)
-- สถานที่ เวลา กำหนดการ — **ยังไม่ต้องใส่ในหน้านี้**
+- เวลางาน/กำหนดการเต็มรูปแบบ — **ยังไม่ต้องใส่ในหน้านี้** (สถานที่ใส่แล้ว ดูหัวข้อด้านบน)
 
-ได้แล้ว: Sheet ID (ตั้งเป็น Script Property `SHEET_ID` ไม่ได้เขียนลงไฟล์), รูปพรีเวดดิ้ง 2 รูป (อยู่ใน `assets-src/`, รอ URL hosting)
+ได้แล้ว: Sheet ID (ตั้งเป็น Script Property `SHEET_ID` ไม่ได้เขียนลงไฟล์), รูปทั้ง 3 รูป (cover/rsvp/thankyou อยู่ใน `assets-src/` และขึ้น jsDelivr แล้ว), GitHub repo (`ppuvitt/poom-kanan-rsvp`), สถานที่จัดงาน (Ava Trivi Studio + ลิงก์ Google Maps)
 
 ---
 
