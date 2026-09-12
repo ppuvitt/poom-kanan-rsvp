@@ -145,6 +145,26 @@ rsvp/
 - ใส่ `width`/`height` ในแท็กเสมอ กัน layout กระตุก
 - **น้ำหนักหน้าเว็บรวมไม่เกิน 1.2MB** ไม่นับเพลง ถ้าเกินให้ตัดรูป
 
+### สูตรย่อรูป — ทำแล้วได้ผล เจอปัญหาเบลอมาแล้วครั้งหนึ่ง อ่านก่อนเปลี่ยนรูปใหม่
+
+ต้นฉบับสูงมาก (~5000px+ กว้าง) เก็บไว้ใน `pic/` (gitignore ไว้ ไม่ commit) ผ่าน `assets-src/` เป็นไฟล์ที่ประมวลผลแล้วเท่านั้น
+
+```bash
+# 1) รูปมือถือ + เดสก์ท็อปจอทั่วไป (1x) — กว้าง 1200px ตามเพดาน 250KB
+sips -Z 1200 pic/pic_01.JPG --out assets-src/cover-src.jpg
+cwebp -q 78 assets-src/cover-src.jpg -o assets-src/cover.webp
+sips -s format jpeg -s formatOptions 78 assets-src/cover-src.jpg --out assets-src/cover.jpg   # JPG สำรอง
+
+# 2) รูปเดสก์ท็อป (2x) — กว้าง 2200px ใช้แก้เบลอบนจอเดสก์ท็อป
+sips -Z 2200 pic/pic_01.JPG --out assets-src/cover-2x-src.jpg
+cwebp -q 72 assets-src/cover-2x-src.jpg -o assets-src/cover@2x.webp
+```
+ทำซ้ำแบบเดียวกันกับ `pic_02.JPG` → `rsvp.webp`/`rsvp.jpg`/`rsvp@2x.webp`
+
+**ทำไมต้องมี 2 ขนาด** — เคยลองใช้ `image-set()` ให้เบราว์เซอร์เลือกเองตาม pixel density (`1x`/`2x`) แล้วจอ PC จอใหญ่ที่ไม่ใช่ Retina (DPR=1) ยังเบลออยู่ดี เพราะ `image-set()` เลือกไฟล์จาก **ความหนาแน่นพิกเซลของจอ อย่างเดียว ไม่สนความกว้างของกล่องที่แสดงจริง** ทางแก้คือ override `background-image` ของ `.photo--cover`/`.photo--rsvp` ไว้ **ในเบรกพอยต์ `@media (min-width:900px)` เดิม** ให้ใช้ไฟล์ `@2x` (2200px) ตรงๆ เป็นค่าเริ่มต้นของเดสก์ท็อปทุกจอ ไม่ต้องพึ่ง DPR — วิธีนี้ทำให้ไฟล์ desktop tier (~350KB/~150KB) **เกินเพดาน 250KB ที่ตั้งไว้ข้างบนโดยตั้งใจ** แต่กระทบเฉพาะจอเดสก์ท็อป มือถือ (ที่เป็นกลุ่มเป้าหมายจริงจากไลน์) ยังโหลดไฟล์ 1200px/≤250KB เท่าเดิมทุกประการ — ถ้าจะเปลี่ยนรูปใหม่ ทำสูตรนี้ซ้ำแล้วอัปโหลดทั้ง 3 ไฟล์ (`.webp` มือถือ, `.jpg` สำรอง, `@2x.webp` เดสก์ท็อป) ต่อรูป
+
+โฮสต์ผ่าน jsDelivr จาก GitHub repo `ppuvitt/poom-kanan-rsvp` (public) พาธ `assets-src/<ชื่อไฟล์>` — URL รูปแบบ `https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/<ชื่อไฟล์>` (ต้อง `git push` ก่อน jsDelivr ถึงจะเห็นไฟล์ใหม่)
+
 ### เพลง
 - **autoplay ที่มีเสียงถูกเบราว์เซอร์มือถือบล็อกทั้งหมด ห้ามพยายามหลบ** ถ้าเขียนโค้ดที่พยายาม autoplay แล้วอ้างว่าใช้ได้ ถือว่าผิด
 - ปุ่มลำโพงมุมขวาบน (มีอยู่แล้วใน `Index.html` แต่ยังไม่มีไฟล์เสียง) **เริ่มที่สถานะปิดเสียง**
