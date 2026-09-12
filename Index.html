@@ -190,41 +190,42 @@ input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:
         <div class="field">
           <label>ท่านจะมาร่วมงานหรือไม่ <span class="req">*</span></label>
           <div class="choice">
-            <input type="radio" id="a1" name="attend" value="มาร่วมงาน" checked><label for="a1">มาแน่นอน</label>
-            <input type="radio" id="a2" name="attend" value="ยังไม่แน่ใจ"><label for="a2">ยังไม่แน่ใจ</label>
-            <input type="radio" id="a3" name="attend" value="ไม่สะดวกมา"><label for="a3">ไม่สะดวก</label>
+            <input type="radio" id="a1" name="attend" value="สะดวกร่วมงาน" checked><label for="a1">สะดวกร่วมงาน</label>
+            <input type="radio" id="a3" name="attend" value="ไม่สะดวกร่วมงาน"><label for="a3">ไม่สะดวกร่วมงาน</label>
           </div>
         </div>
 
-        <div id="grp-count" class="field">
-          <label for="count">มาด้วยกันกี่ท่าน (นับรวมท่าน)</label>
-          <input type="number" id="count" min="1" max="10" value="1" inputmode="numeric">
-        </div>
-
-        <div class="field">
-          <label for="cardname">ชื่อที่ต้องการให้ปรากฏบนการ์ด <span class="req">*</span></label>
-          <input type="text" id="cardname" placeholder="เช่น คุณสมชาย–คุณวันเพ็ญ ศรีสุข">
-          <p class="hint">ใส่คำนำหน้า ยศ และชื่อคู่สมรสให้ครบ เราจะพิมพ์ลงการ์ดตามนี้ทุกตัวอักษร</p>
-        </div>
-
-        <div class="field">
-          <label>ท่านสะดวกรับการ์ดแบบใด <span class="req">*</span></label>
-          <div class="choice">
-            <input type="radio" id="d1" name="deliver" value="ส่งไปรษณีย์" checked><label for="d1">ส่งไปรษณีย์</label>
-            <input type="radio" id="d2" name="deliver" value="รับด้วยมือ"><label for="d2">รับด้วยมือ</label>
-            <input type="radio" id="d3" name="deliver" value="ไม่ต้องส่ง"><label for="d3">ไม่ต้องส่ง</label>
+        <div id="grp-attending">
+          <div id="grp-count" class="field">
+            <label for="count">มาด้วยกันกี่ท่าน (นับรวมท่าน)</label>
+            <input type="number" id="count" min="1" max="10" value="1" inputmode="numeric">
           </div>
-        </div>
 
-        <div id="grp-addr">
           <div class="field">
-            <label for="addr">ที่อยู่จัดส่ง <span class="req">*</span></label>
-            <textarea id="addr" placeholder="ชื่อผู้รับ / บ้านเลขที่ / ถนน / แขวง / เขต / จังหวัด / รหัสไปรษณีย์"></textarea>
+            <label for="cardname">ชื่อที่ต้องการให้ปรากฏบนการ์ด <span class="req">*</span></label>
+            <input type="text" id="cardname" placeholder="เช่น คุณสมชาย–คุณวันเพ็ญ ศรีสุข">
+            <p class="hint">ใส่คำนำหน้า ยศ และชื่อคู่สมรสให้ครบ เราจะพิมพ์ลงการ์ดตามนี้ทุกตัวอักษร</p>
           </div>
+
           <div class="field">
-            <label for="tel">เบอร์โทร <span class="req">*</span></label>
-            <input type="tel" id="tel" inputmode="tel" placeholder="08X-XXX-XXXX">
-            <p class="hint">เผื่อไปรษณีย์ติดต่อไม่ได้</p>
+            <label>ท่านสะดวกรับการ์ดแบบใด <span class="req">*</span></label>
+            <div class="choice">
+              <input type="radio" id="d1" name="deliver" value="ส่งไปรษณีย์" checked><label for="d1">ส่งไปรษณีย์</label>
+              <input type="radio" id="d2" name="deliver" value="รับด้วยมือ"><label for="d2">รับด้วยมือ</label>
+              <input type="radio" id="d3" name="deliver" value="ไม่ต้องส่ง"><label for="d3">ไม่ต้องส่ง</label>
+            </div>
+          </div>
+
+          <div id="grp-addr">
+            <div class="field">
+              <label for="addr">ที่อยู่จัดส่ง <span class="req">*</span></label>
+              <textarea id="addr" placeholder="ชื่อผู้รับ / บ้านเลขที่ / ถนน / แขวง / เขต / จังหวัด / รหัสไปรษณีย์"></textarea>
+            </div>
+            <div class="field">
+              <label for="tel">เบอร์โทร <span class="req">*</span></label>
+              <input type="tel" id="tel" inputmode="tel" placeholder="08X-XXX-XXXX">
+              <p class="hint">เผื่อไปรษณีย์ติดต่อไม่ได้</p>
+            </div>
           </div>
         </div>
 
@@ -239,7 +240,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:
 
       <div class="done hide" id="done">
         <span class="script">Thank you</span>
-        <p>บันทึกคำตอบของท่านเรียบร้อยแล้ว<br>แล้วพบกันวันที่ 27 ธันวาคมนี้</p>
+        <p id="done-msg">บันทึกคำตอบของท่านเรียบร้อยแล้ว<br>แล้วพบกันวันที่ 27 ธันวาคมนี้</p>
       </div>
     </div>
   </div>
@@ -256,10 +257,13 @@ document.getElementById('back').onclick = function(){
   view.classList.remove('on'); cover.style.display = ''; window.scrollTo(0,0);
 };
 
-var grpCount = document.getElementById('grp-count');
+var DONE_MSG_ATTENDING = 'บันทึกคำตอบของท่านเรียบร้อยแล้ว<br>แล้วพบกันวันที่ 27 ธันวาคมนี้';
+var DONE_MSG_NOT_ATTENDING = 'ไม่เป็นไรเลยค่ะ/ครับ ขอบคุณที่สละเวลาตอบกลับมานะคะ/ครับ 🤍<br>ไว้เจอกันใหม่โอกาสหน้านะคะ/ครับ';
+
+var grpAttending = document.getElementById('grp-attending');
 var grpAddr  = document.getElementById('grp-addr');
 document.querySelectorAll('input[name=attend]').forEach(function(r){
-  r.onchange = function(){ grpCount.style.display = document.getElementById('a3').checked ? 'none' : ''; };
+  r.onchange = function(){ grpAttending.style.display = document.getElementById('a3').checked ? 'none' : ''; };
 });
 document.querySelectorAll('input[name=deliver]').forEach(function(r){
   r.onchange = function(){ grpAddr.style.display = document.getElementById('d1').checked ? '' : 'none'; };
@@ -272,21 +276,31 @@ document.getElementById('rsvp').onsubmit = function(e){
   var name = document.getElementById('name').value.trim();
   if (name.length < 2){ msg.textContent = 'กรุณากรอกชื่อของท่าน'; document.getElementById('name').focus(); return; }
 
-  var cardname = document.getElementById('cardname').value.trim();
-  if (cardname.length < 2){ msg.textContent = 'กรุณากรอกชื่อที่จะให้ปรากฏบนการ์ด'; document.getElementById('cardname').focus(); return; }
+  var attending = document.getElementById('a1').checked;
+  var count = '', cardname = '', deliver = '', addr = '', tel = '';
 
-  if (document.getElementById('d1').checked && document.getElementById('addr').value.trim().length < 10){
-    msg.textContent = 'กรุณากรอกที่อยู่จัดส่งให้ครบถ้วน'; document.getElementById('addr').focus(); return;
+  if (attending) {
+    cardname = document.getElementById('cardname').value.trim();
+    if (cardname.length < 2){ msg.textContent = 'กรุณากรอกชื่อที่จะให้ปรากฏบนการ์ด'; document.getElementById('cardname').focus(); return; }
+
+    count = document.getElementById('count').value;
+    deliver = document.querySelector('input[name=deliver]:checked').value;
+
+    if (document.getElementById('d1').checked){
+      addr = document.getElementById('addr').value.trim();
+      tel = document.getElementById('tel').value.trim();
+      if (addr.length < 10){ msg.textContent = 'กรุณากรอกที่อยู่จัดส่งให้ครบถ้วน'; document.getElementById('addr').focus(); return; }
+    }
   }
 
   var payload = {
     name: name,
     attend: document.querySelector('input[name=attend]:checked').value,
-    count: document.getElementById('count').value,
+    count: count,
     cardname: cardname,
-    deliver: document.querySelector('input[name=deliver]:checked').value,
-    addr: document.getElementById('addr').value.trim(),
-    tel: document.getElementById('tel').value.trim(),
+    deliver: deliver,
+    addr: addr,
+    tel: tel,
     wish: document.getElementById('wish').value.trim(),
     hp: document.getElementById('hp').value
   };
@@ -295,6 +309,7 @@ document.getElementById('rsvp').onsubmit = function(e){
   btn.disabled = true; btn.textContent = 'กำลังส่ง…';
 
   google.script.run.withSuccessHandler(function(){
+    document.getElementById('done-msg').innerHTML = attending ? DONE_MSG_ATTENDING : DONE_MSG_NOT_ATTENDING;
     document.getElementById('rsvp').classList.add('hide');
     document.getElementById('done').classList.remove('hide');
     window.scrollTo(0,0);

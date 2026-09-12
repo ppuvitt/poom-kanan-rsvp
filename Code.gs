@@ -43,37 +43,42 @@ function submitRsvp(form) {
 
   var name = String(form.name || '').trim().slice(0, 100);
   var attend = String(form.attend || '').trim().slice(0, 20);
-  var cardname = String(form.cardname || '').trim().slice(0, 150);
-  var deliver = String(form.deliver || '').trim().slice(0, 20);
 
   if (name.length < 2) {
     throw new Error('กรุณากรอกชื่อของท่าน');
   }
-  if (['มาร่วมงาน', 'ยังไม่แน่ใจ', 'ไม่สะดวกมา'].indexOf(attend) === -1) {
+  if (['สะดวกร่วมงาน', 'ไม่สะดวกร่วมงาน'].indexOf(attend) === -1) {
     throw new Error('กรุณาเลือกสถานะการเข้าร่วม');
-  }
-  if (cardname.length < 2) {
-    throw new Error('กรุณากรอกชื่อที่จะให้ปรากฏบนการ์ด');
-  }
-  if (['ส่งไปรษณีย์', 'รับด้วยมือ', 'ไม่ต้องส่ง'].indexOf(deliver) === -1) {
-    throw new Error('กรุณาเลือกวิธีรับการ์ด');
   }
 
   var count = '';
-  if (attend !== 'ไม่สะดวกมา') {
-    count = Math.max(1, Math.min(10, parseInt(form.count, 10) || 1));
-  }
-
+  var cardname = '';
+  var deliver = '';
   var addr = '';
   var tel = '';
-  if (deliver === 'ส่งไปรษณีย์') {
-    addr = String(form.addr || '').trim().slice(0, 500);
-    tel = String(form.tel || '').trim().slice(0, 20);
-    if (addr.length < 10) {
-      throw new Error('กรุณากรอกที่อยู่จัดส่งให้ครบถ้วน');
+
+  if (attend === 'สะดวกร่วมงาน') {
+    cardname = String(form.cardname || '').trim().slice(0, 150);
+    if (cardname.length < 2) {
+      throw new Error('กรุณากรอกชื่อที่จะให้ปรากฏบนการ์ด');
     }
-    if (tel.length < 9) {
-      throw new Error('กรุณากรอกเบอร์โทรให้ถูกต้อง');
+
+    deliver = String(form.deliver || '').trim().slice(0, 20);
+    if (['ส่งไปรษณีย์', 'รับด้วยมือ', 'ไม่ต้องส่ง'].indexOf(deliver) === -1) {
+      throw new Error('กรุณาเลือกวิธีรับการ์ด');
+    }
+
+    count = Math.max(1, Math.min(10, parseInt(form.count, 10) || 1));
+
+    if (deliver === 'ส่งไปรษณีย์') {
+      addr = String(form.addr || '').trim().slice(0, 500);
+      tel = String(form.tel || '').trim().slice(0, 20);
+      if (addr.length < 10) {
+        throw new Error('กรุณากรอกที่อยู่จัดส่งให้ครบถ้วน');
+      }
+      if (tel.length < 9) {
+        throw new Error('กรุณากรอกเบอร์โทรให้ถูกต้อง');
+      }
     }
   }
 
