@@ -39,8 +39,24 @@ h1,h2{margin:0;font-weight:500;line-height:1.3}
 .split__panel{position:relative;flex:1 1 auto;overflow:hidden;z-index:1;
   background:linear-gradient(175deg,#E9F0F7 0%,#FAEFEC 42%,var(--cream) 78%)}
 
-.photo--cover{background-image:url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/cover.webp")}
-.photo--rsvp{background-image:url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/rsvp.webp")}
+.photo--cover{
+  background-image:url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/cover.webp");
+  background-image:-webkit-image-set(
+    url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/cover.webp") 1x,
+    url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/cover@2x.webp") 2x);
+  background-image:image-set(
+    url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/cover.webp") 1x,
+    url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/cover@2x.webp") 2x);
+}
+.photo--rsvp{
+  background-image:url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/rsvp.webp");
+  background-image:-webkit-image-set(
+    url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/rsvp.webp") 1x,
+    url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/rsvp@2x.webp") 2x);
+  background-image:image-set(
+    url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/rsvp.webp") 1x,
+    url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/rsvp@2x.webp") 2x);
+}
 
 .overlay{position:absolute;left:0;right:0;bottom:26px;padding:0 28px;z-index:2;color:#fff;text-align:center}
 .overlay .script{font-size:clamp(50px,15vw,70px);line-height:1.05;display:block;text-shadow:0 2px 20px rgba(78,62,60,.5)}
