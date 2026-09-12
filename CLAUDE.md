@@ -22,9 +22,11 @@
 - มี `Code.gs` และ `appsscript.json` แล้ว (`timeZone: Asia/Bangkok`, `webapp.access: ANYONE_ANONYMOUS`) — `submitRsvp` หุ้ม `LockService`, `.slice()` ทุกฟิลด์, ตรวจ honeypot (`#hp`) แล้ว แต่ **อ่าน Sheet ID จาก Script Properties (`SHEET_ID`) เท่านั้น ไม่ได้ hardcode ไว้ในโค้ด** — ต้องไปตั้งค่าใน Apps Script editor เองก่อนใช้งานได้จริง (Project Settings → Script Properties)
 - `Index.html` ต่อ `google.script.run.submitRsvp(...)` จริงแล้ว มี `<base target="_top">` และมี honeypot field แล้ว
 - รูปหน้าปก/หน้าฟอร์มอยู่ใน `assets-src/` แล้ว (`cover.webp` ~155KB, `rsvp.webp` ~58KB, ย่อ 1200px กว้าง มี `.jpg` สำรอง) แต่ **ใน `Index.html` ยังเป็น `<<TODO: ...>>` อยู่** เพราะยังไม่มี URL ของ GitHub repo + jsDelivr มาแทน (ห้ามเดา ตามกฎ)
-- **ยังไม่ใช่ git repository** (ไม่มี `.git`) ไม่มี `.gitignore`, `package.json`, `README.md` — ตรวจก่อนใช้คำสั่ง git ใด ๆ
+- เป็น git repo แล้ว (commit แรกลงแล้ว) มี `.gitignore` (กัน `.clasp.json`, `.clasprc.json`, `pic/`) และ `.claspignore` (อนุญาตแค่ `appsscript.json`, `Code.gs`, `Index.html` ให้ clasp push) — ยังไม่ได้ตั้ง remote/push ขึ้น GitHub
+- สร้าง Apps Script standalone project ใหม่แล้วผ่าน `clasp create` และ `clasp push --force` สำเร็จ (3 ไฟล์) — **ข้อควรระวัง: `clasp create` เขียนทับ `appsscript.json` เป็นค่า default `America/New_York` แบบไม่ถาม ต้องเซ็ตกลับเป็น `Asia/Bangkok` ทุกครั้งหลังรัน `clasp create`** (เจอเคสนี้จริงแล้วรอบนี้)
+- **ยังไม่ได้ตั้ง Script Property `SHEET_ID`** ใน Apps Script editor เลย ถ้ายังไม่ตั้ง `submitRsvp` จะ throw error ทันที
 - ปุ่มเพลง (`#sound`) มีแค่ตรรกะ toggle ไอคอนสองปุ่ม SVG **ยังไม่มี `<audio>` element และยังไม่เล่นเพลงจริง**
-- ยังไม่ได้ตรวจ end-to-end จริง (ยังไม่ได้ clasp push/deploy) — ดู Definition of done ก่อนสรุปว่าใช้งานได้
+- ยังไม่ได้ทดสอบ end-to-end จริงในเบราว์เซอร์ (ยังไม่ได้ `clasp create-deployment` — ห้ามรันเองโดยไม่ถาม) — ดู Definition of done ก่อนสรุปว่าใช้งานได้
 
 ---
 
