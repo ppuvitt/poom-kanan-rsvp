@@ -90,7 +90,8 @@ h1,h2{margin:0;font-weight:500;line-height:1.3}
 /* ---------- หน้าปก ---------- */
 #cover .split__panel{padding:60px 30px 64px;text-align:center;display:flex;flex-direction:column;justify-content:center}
 .date{position:relative;font-size:clamp(19px,5.6vw,23px);color:var(--gold-deep)}
-.date__sub{display:block;font-size:14.5px;font-style:italic;color:var(--sky-deep);margin-top:8px;letter-spacing:.04em}
+.date__time{display:block;font-family:"Cinzel",serif;font-size:12.5px;letter-spacing:.16em;color:var(--gold-deep);margin-top:10px}
+.date__sub{display:block;font-size:16px;font-style:italic;color:var(--ink);margin-top:10px;letter-spacing:.02em}
 .rule{width:132px;height:1px;margin:24px auto;position:relative;
   background:linear-gradient(90deg,transparent,var(--gold) 22%,var(--sky-deep) 50%,var(--gold) 78%,transparent);opacity:.65}
 .lede{position:relative;font-size:clamp(20px,5.6vw,24px);line-height:1.6;color:var(--ink);max-width:340px;margin:0 auto;font-style:italic}
@@ -101,7 +102,7 @@ h1,h2{margin:0;font-weight:500;line-height:1.3}
 .btn:hover,.btn:focus-visible{background:var(--gold);color:#fff}
 .btn:focus-visible{outline:2px solid var(--gold-deep);outline-offset:3px}
 
-.eyebrow{font-family:"Cinzel",serif;font-size:11px;letter-spacing:.22em;color:var(--sky-deep);margin:0}
+.eyebrow{font-family:"Cinzel",serif;font-size:13px;letter-spacing:.18em;color:var(--gold-deep);margin:0}
 .rule--sm{width:64px;margin:34px auto 26px;opacity:.5}
 
 .venue{margin-bottom:30px}
@@ -161,7 +162,9 @@ input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:
 .hide{display:none}
 .done{text-align:center;padding:56px 0}
 .done .script{font-size:52px;color:var(--gold-deep);display:block;margin-bottom:16px}
-.done p{color:var(--ink-soft);font-size:15.5px;margin:0;line-height:1.9}
+.done .done-msg{color:var(--ink-soft);font-size:15.5px;margin:0;line-height:1.9}
+.done .venue{margin:16px 0 0}
+.done .hint{margin-top:14px}
 
 /* ---------- จอใหญ่ ---------- */
 @media (min-width:900px){
@@ -198,6 +201,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:
 
     <div class="date">
       <span class="caps">Sunday, 27 December 2026</span>
+      <span class="date__time">Evening Celebration</span>
       <span class="date__sub">Please let us know if you can join us</span>
     </div>
     <div class="rule"></div>
@@ -305,7 +309,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:
 
       <div class="done hide" id="done">
         <span class="script">Thank you</span>
-        <p id="done-msg">บันทึกคำตอบของท่านเรียบร้อยแล้ว<br>แล้วพบกันวันที่ 27 ธันวาคมนี้</p>
+        <div class="done-msg" id="done-msg">บันทึกคำตอบของท่านเรียบร้อยแล้ว<br>แล้วพบกันวันที่ 27 ธันวาคมนี้</div>
       </div>
     </div>
   </div>
@@ -322,7 +326,15 @@ document.getElementById('back').onclick = function(){
   view.classList.remove('on'); cover.style.display = ''; window.scrollTo(0,0);
 };
 
-var DONE_MSG_ATTENDING = 'บันทึกคำตอบของท่านเรียบร้อยแล้ว<br>แล้วพบกันวันที่ 27 ธันวาคมนี้';
+var VENUE_MAPS_URL = 'https://www.google.com/maps/place/Ava+Trivi+Studio/@13.9176096,100.446719,1069m/data=!3m2!1e3!4b1!4m6!3m5!1s0x30e285caf7b4da1b:0xf0eccb2dcce3cc8d!8m2!3d13.9176044!4d100.4492939!16s%2Fg%2F11g2kl9f6m!5m1!1e1?entry=ttu&g_ep=EgoyMDI2MDkwOS4wIKXMDSoASAFQAw%3D%3D';
+var DONE_MSG_ATTENDING = 'บันทึกคำตอบของท่านเรียบร้อยแล้ว<br>แล้วพบกันวันที่ 27 ธันวาคม 2569 ที่' +
+  '<div class="venue">' +
+    '<p class="venue__name">Ava Trivi Studio</p>' +
+    '<a class="venue__link" href="' + VENUE_MAPS_URL + '">View on Google Maps' +
+      '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>' +
+    '</a>' +
+  '</div>' +
+  '<p class="hint">ส่วนกำหนดการโดยละเอียดจะแจ้งให้ทราบใน invitation อีกครั้งนะครับ/คะ</p>';
 var DONE_MSG_NOT_ATTENDING = 'ไม่เป็นไรเลยค่ะ/ครับ ขอบคุณที่สละเวลาตอบกลับมานะคะ/ครับ 🤍<br>ไว้เจอกันใหม่โอกาสหน้านะคะ/ครับ';
 
 var grpAttending = document.getElementById('grp-attending');
