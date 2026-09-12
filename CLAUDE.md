@@ -167,11 +167,14 @@ cwebp -q 72 assets-src/cover-2x-src.jpg -o assets-src/cover@2x.webp
 
 โฮสต์ผ่าน jsDelivr จาก GitHub repo `ppuvitt/poom-kanan-rsvp` (public) พาธ `assets-src/<ชื่อไฟล์>` — URL รูปแบบ `https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/<ชื่อไฟล์>` (ต้อง `git push` ก่อน jsDelivr ถึงจะเห็นไฟล์ใหม่)
 
-**ถ้าเปลี่ยนรูปแต่ใช้ชื่อไฟล์เดิม (เช่นเปลี่ยนรูป `rsvp.webp` เป็นรูปใหม่) jsDelivr แคชไฟล์เดิมไว้ที่ URL เดิม อาจยังเห็นรูปเก่าอยู่ได้ถึงหลักวัน** ต้อง purge cache หลัง push ทุกครั้งที่เจอกรณีนี้ (ไฟล์ชื่อใหม่ไม่ต้อง purge):
-```bash
-curl "https://purge.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/<ชื่อไฟล์ที่เปลี่ยน>"
-```
-แล้วเช็คด้วย `curl -sI` ว่า `content-length` ตรงกับไฟล์ใหม่จริงก่อนบอกว่าเสร็จ
+**ถ้าเปลี่ยนรูปแต่ใช้ชื่อไฟล์เดิม (เช่นเปลี่ยนรูป `rsvp.webp` เป็นรูปใหม่) เจอปัญหาแคช 2 ชั้นซ้อนกัน — เจอเคสจริงมาแล้ว รูปไม่เปลี่ยนทั้งที่ทำถูกทุกขั้นตอน:**
+1. **แคชฝั่ง jsDelivr (CDN)** — ต้อง purge หลัง push ทุกครั้งที่ใช้ชื่อไฟล์ซ้ำ:
+   ```bash
+   curl "https://purge.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/<ชื่อไฟล์ที่เปลี่ยน>"
+   ```
+   แล้วเช็คด้วย `curl -sI` ว่า `content-length` ตรงกับไฟล์ใหม่จริง
+2. **แคชฝั่ง browser ของคนเปิดเว็บ** — purge ฝั่ง jsDelivr **ไม่ช่วยอะไรเลย** เพราะ jsDelivr ส่ง `cache-control: max-age=604800` (7 วัน) ให้ browser เก็บเองไว้แล้ว ใครเปิดลิงก์นี้มาก่อนหน้าจะยังเห็นรูปเก่าจน cache หมดอายุ ทางแก้ถาวรคือ **เติม query string ต่อท้าย URL แล้วเพิ่มเลขเวอร์ชันทุกครั้งที่เปลี่ยนไฟล์ชื่อเดิม** เช่น `rsvp.webp?v=2` → ครั้งหน้าเปลี่ยนอีกก็ขยับเป็น `?v=3` (ต้องแก้ทั้ง 3 จุดที่อ้างถึงไฟล์นั้น: base rule, `image-set()`, และ override ใน `@media (min-width:900px)`) วิธีนี้บังคับให้ทั้ง CDN และ browser มองเป็นคนละ URL ทันที ไม่ต้องพึ่งให้คนกด hard refresh เอง
+   - ไฟล์ที่ตั้งชื่อใหม่ไม่เคยใช้มาก่อน (เช่น `thankyou.webp`) ไม่มีปัญหานี้ ไม่ต้อง purge ไม่ต้องมี `?v=`
 
 ### หน้า Thank you มีรูปพื้นหลังของตัวเอง (`.photo--thankyou`)
 สลับจาก `.photo--rsvp` เป็น `.photo--thankyou` ด้วย JS ตอน `submitRsvp` สำเร็จ (`classList.replace('photo--rsvp','photo--thankyou')`) — เพื่อให้ animation `slideInRight` เล่นซ้ำตอนสลับรูป **animation ต้องผูกกับ selector เฉพาะคลาสรูป** (`#rsvp-view.on .photo--rsvp` / `#rsvp-view.on .photo--thankyou` แยกกัน) ห้ามผูกกับ `.split__photo` เฉยๆ เพราะแบบนั้น animation จะไม่ retrigger ตอนสลับคลาส (คลาสยังแมตช์ selector เดิมต่อเนื่อง ไม่มีการเปลี่ยนค่า computed animation-name)
