@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<base target="_top">
+<title>Poom &amp; Kanan — 27 December 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Cinzel:wght@400;500&family=IBM+Plex+Sans+Thai:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FCF6F1;
+  --blush-deep:#EDCECB;
+  --rose:#C98C8C;
+  --sky-deep:#7E9CBC;
+  --ink:#4E3E3C;
+  --ink-soft:#8B7573;
+  --gold:#C09B52;
+  --gold-deep:#9A7734;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--cream);color:var(--ink);
+  font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:17px;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2{margin:0;font-weight:500;line-height:1.3}
+.script{font-family:"Great Vibes",cursive;font-weight:400}
+.caps{font-family:"Cinzel",serif;letter-spacing:.16em}
+
+/* ---------- โครงร่วมสองหน้า ---------- */
+.split{min-height:100svh;display:flex;flex-direction:column}
+.split__photo{position:relative;flex:0 0 auto;height:56svh;
+  background-position:center 30%;background-size:cover;background-repeat:no-repeat}
+.split__photo::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(78,62,60,.04) 0%,rgba(78,62,60,.28) 58%,rgba(78,62,60,.60) 100%)}
+.split__panel{position:relative;flex:1 1 auto;overflow:hidden;z-index:1;
+  background:linear-gradient(175deg,#E9F0F7 0%,#FAEFEC 42%,var(--cream) 78%)}
+
+.photo--cover{background-image:url("<<TODO: ใส่ jsDelivr URL ของ cover.webp หลังตั้ง GitHub repo>>")}
+.photo--rsvp{background-image:url("<<TODO: ใส่ jsDelivr URL ของ rsvp.webp หลังตั้ง GitHub repo>>")}
+
+.overlay{position:absolute;left:0;right:0;bottom:26px;padding:0 28px;z-index:2;color:#fff;text-align:center}
+.overlay .script{font-size:clamp(50px,15vw,70px);line-height:1.05;display:block;text-shadow:0 2px 20px rgba(78,62,60,.5)}
+.overlay .caps{font-size:13px;display:block;opacity:.94;text-shadow:0 1px 12px rgba(78,62,60,.55)}
+
+/* ---------- หน้าปก ---------- */
+#cover .split__panel{padding:60px 30px 64px;text-align:center;display:flex;flex-direction:column;justify-content:center}
+.date{position:relative;font-size:clamp(19px,5.6vw,23px);color:var(--gold-deep)}
+.date__sub{display:block;font-size:14.5px;font-style:italic;color:var(--sky-deep);margin-top:8px;letter-spacing:.04em}
+.rule{width:132px;height:1px;margin:24px auto;position:relative;
+  background:linear-gradient(90deg,transparent,var(--gold) 22%,var(--sky-deep) 50%,var(--gold) 78%,transparent);opacity:.65}
+.lede{position:relative;font-size:18px;color:var(--ink-soft);max-width:320px;margin:0 auto;font-style:italic}
+.btn{position:relative;display:inline-block;margin-top:28px;
+  border:1px solid var(--gold);background:transparent;color:var(--gold-deep);
+  font-family:"Cinzel",serif;font-size:14px;letter-spacing:.18em;
+  padding:15px 42px;border-radius:999px;cursor:pointer;transition:background .25s,color .25s}
+.btn:hover,.btn:focus-visible{background:var(--gold);color:#fff}
+.btn:focus-visible{outline:2px solid var(--gold-deep);outline-offset:3px}
+
+/* ---------- ปุ่มเพลง ---------- */
+#sound{position:fixed;top:14px;right:14px;z-index:40;width:40px;height:40px;border-radius:50%;
+  background:rgba(252,246,241,.8);border:1px solid rgba(192,155,82,.45);color:var(--gold-deep);
+  cursor:pointer;display:grid;place-items:center;backdrop-filter:blur(6px)}
+#sound svg{width:18px;height:18px}
+
+/* ---------- หน้า RSVP ---------- */
+#rsvp-view{display:none}
+#rsvp-view.on{display:flex}
+#rsvp-view .split__photo{display:none}          /* มือถือ: ไม่มีรูป */
+#rsvp-view .split__panel{padding:52px 24px 70px;
+  font-family:"IBM Plex Sans Thai","Cormorant Garamond",sans-serif;font-weight:300;font-size:15.5px;line-height:1.8}
+
+.sheet{max-width:430px;margin:0 auto;position:relative;z-index:2}
+.back{background:none;border:none;color:var(--ink-soft);font-family:inherit;font-size:14.5px;
+  padding:0;margin-bottom:18px;cursor:pointer}
+.sheet h2{font-family:"Cinzel",serif;font-size:22px;letter-spacing:.14em;text-align:center;color:var(--gold-deep)}
+.sheet__sub{text-align:center;font-size:14.5px;color:var(--ink-soft);margin:12px 0 32px}
+
+.field{margin-bottom:22px}
+label{display:block;font-size:14.5px;color:var(--ink-soft);margin-bottom:8px}
+.req{color:var(--rose)}
+input[type=text],input[type=tel],input[type=number],textarea{
+  width:100%;background:#fff;border:1px solid var(--blush-deep);border-radius:10px;
+  color:var(--ink);font-family:inherit;font-size:16px;font-weight:300;padding:12px 14px}
+textarea{resize:vertical;min-height:84px;line-height:1.75}
+input::placeholder,textarea::placeholder{color:#C6B2AF}
+input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:0 0 0 3px rgba(126,156,188,.16)}
+.hint{font-size:13.5px;color:var(--ink-soft);opacity:.9;margin:7px 0 0;line-height:1.65}
+
+.choice{display:flex;gap:8px;flex-wrap:wrap}
+.choice input{position:absolute;opacity:0;width:1px;height:1px}
+.choice label{flex:1 1 96px;margin:0;text-align:center;background:#fff;
+  border:1px solid var(--blush-deep);border-radius:10px;padding:11px 8px;font-size:14.5px;
+  color:var(--ink-soft);cursor:pointer;transition:.18s}
+.choice input:checked + label{border-color:var(--gold);background:#FFFBF3;color:var(--ink)}
+.choice input:focus-visible + label{outline:2px solid var(--gold);outline-offset:2px}
+
+.submit{width:100%;margin-top:12px;background:var(--gold);color:#fff;border:none;border-radius:999px;
+  font-family:inherit;font-weight:400;font-size:16px;letter-spacing:.03em;padding:16px;cursor:pointer;transition:opacity .2s}
+.submit:disabled{opacity:.55;cursor:not-allowed}
+.msg{margin-top:12px;font-size:14px;color:var(--rose);min-height:18px;text-align:center}
+.hide{display:none}
+.done{text-align:center;padding:56px 0}
+.done .script{font-size:52px;color:var(--gold-deep);display:block;margin-bottom:16px}
+.done p{color:var(--ink-soft);font-size:15.5px;margin:0;line-height:1.9}
+
+/* ---------- จอใหญ่ ---------- */
+@media (min-width:900px){
+  .split{flex-direction:row}
+  .split__photo{flex:0 0 52%;height:100svh;align-self:flex-start;position:sticky;top:0}
+  #rsvp-view .split__photo{display:block;background-position:center 35%}
+  #rsvp-view .overlay{bottom:52px}
+  .split__panel{flex:1 1 48%;min-height:100svh}
+  #cover .split__panel{padding:0 76px}
+  #rsvp-view .split__panel{padding:76px 62px 88px}
+  .overlay{bottom:52px;padding:0 48px;text-align:left}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<button id="sound" aria-label="Turn music on">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11 5 6 9H3v6h3l5 4z"/><path id="sx1" d="m17 9 4 6"/><path id="sx2" d="m21 9-4 6"/>
+  </svg>
+</button>
+
+<!-- ================= หน้าที่ 1 ================= -->
+<section id="cover" class="split">
+  <div class="split__photo photo--cover">
+    <div class="overlay"><span class="script">Poom &amp; Kanan</span></div>
+  </div>
+
+  <div class="split__panel">
+
+    <div class="date">
+      <span class="caps">Sunday, 27 December 2026</span>
+      <span class="date__sub">Please let us know if you can join us</span>
+    </div>
+    <div class="rule"></div>
+    <p class="lede">We are gathering names before the invitations go to print, and we would love yours to be on the list.</p>
+    <div><button class="btn" id="go">RSVP</button></div>
+  </div>
+</section>
+
+<!-- ================= หน้าที่ 2 ================= -->
+<section id="rsvp-view" class="split">
+  <div class="split__photo photo--rsvp">
+    <div class="overlay"><span class="caps">Poom &amp; Kanan · 27.12.2026</span></div>
+  </div>
+
+  <div class="split__panel">
+
+    <div class="sheet">
+      <button class="back" id="back">← ย้อนกลับ</button>
+
+      <form id="rsvp">
+        <h2>RSVP</h2>
+        <p class="sheet__sub">ข้อมูลนี้เราจะใช้จัดทำการ์ดเชิญฉบับจริง</p>
+
+        <input type="text" id="hp" name="hp" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px" aria-hidden="true">
+
+        <div class="field">
+          <label for="name">ชื่อของท่าน <span class="req">*</span></label>
+          <input type="text" id="name" autocomplete="name">
+        </div>
+
+        <div class="field">
+          <label>ท่านจะมาร่วมงานหรือไม่ <span class="req">*</span></label>
+          <div class="choice">
+            <input type="radio" id="a1" name="attend" value="มาร่วมงาน" checked><label for="a1">มาแน่นอน</label>
+            <input type="radio" id="a2" name="attend" value="ยังไม่แน่ใจ"><label for="a2">ยังไม่แน่ใจ</label>
+            <input type="radio" id="a3" name="attend" value="ไม่สะดวกมา"><label for="a3">ไม่สะดวก</label>
+          </div>
+        </div>
+
+        <div id="grp-count" class="field">
+          <label for="count">มาด้วยกันกี่ท่าน (นับรวมท่าน)</label>
+          <input type="number" id="count" min="1" max="10" value="1" inputmode="numeric">
+        </div>
+
+        <div class="field">
+          <label for="cardname">ชื่อที่ต้องการให้ปรากฏบนการ์ด <span class="req">*</span></label>
+          <input type="text" id="cardname" placeholder="เช่น คุณสมชาย–คุณวันเพ็ญ ศรีสุข">
+          <p class="hint">ใส่คำนำหน้า ยศ และชื่อคู่สมรสให้ครบ เราจะพิมพ์ลงการ์ดตามนี้ทุกตัวอักษร</p>
+        </div>
+
+        <div class="field">
+          <label>ท่านสะดวกรับการ์ดแบบใด <span class="req">*</span></label>
+          <div class="choice">
+            <input type="radio" id="d1" name="deliver" value="ส่งไปรษณีย์" checked><label for="d1">ส่งไปรษณีย์</label>
+            <input type="radio" id="d2" name="deliver" value="รับด้วยมือ"><label for="d2">รับด้วยมือ</label>
+            <input type="radio" id="d3" name="deliver" value="ไม่ต้องส่ง"><label for="d3">ไม่ต้องส่ง</label>
+          </div>
+        </div>
+
+        <div id="grp-addr">
+          <div class="field">
+            <label for="addr">ที่อยู่จัดส่ง <span class="req">*</span></label>
+            <textarea id="addr" placeholder="ชื่อผู้รับ / บ้านเลขที่ / ถนน / แขวง / เขต / จังหวัด / รหัสไปรษณีย์"></textarea>
+          </div>
+          <div class="field">
+            <label for="tel">เบอร์โทร <span class="req">*</span></label>
+            <input type="tel" id="tel" inputmode="tel" placeholder="08X-XXX-XXXX">
+            <p class="hint">เผื่อไปรษณีย์ติดต่อไม่ได้</p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="wish">อยากบอกอะไรบ่าวสาวไหม</label>
+          <textarea id="wish"></textarea>
+        </div>
+
+        <button class="submit" type="submit" id="send">ส่งคำตอบ</button>
+        <div class="msg" id="msg" role="status" aria-live="polite"></div>
+      </form>
+
+      <div class="done hide" id="done">
+        <span class="script">Thank you</span>
+        <p>บันทึกคำตอบของท่านเรียบร้อยแล้ว<br>แล้วพบกันวันที่ 27 ธันวาคมนี้</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+var cover = document.getElementById('cover');
+var view  = document.getElementById('rsvp-view');
+
+document.getElementById('go').onclick = function(){
+  cover.style.display = 'none'; view.classList.add('on'); window.scrollTo(0,0);
+};
+document.getElementById('back').onclick = function(){
+  view.classList.remove('on'); cover.style.display = ''; window.scrollTo(0,0);
+};
+
+var grpCount = document.getElementById('grp-count');
+var grpAddr  = document.getElementById('grp-addr');
+document.querySelectorAll('input[name=attend]').forEach(function(r){
+  r.onchange = function(){ grpCount.style.display = document.getElementById('a3').checked ? 'none' : ''; };
+});
+document.querySelectorAll('input[name=deliver]').forEach(function(r){
+  r.onchange = function(){ grpAddr.style.display = document.getElementById('d1').checked ? '' : 'none'; };
+});
+
+document.getElementById('rsvp').onsubmit = function(e){
+  e.preventDefault();
+  var msg = document.getElementById('msg'); msg.textContent = '';
+
+  var name = document.getElementById('name').value.trim();
+  if (name.length < 2){ msg.textContent = 'กรุณากรอกชื่อของท่าน'; document.getElementById('name').focus(); return; }
+
+  var cardname = document.getElementById('cardname').value.trim();
+  if (cardname.length < 2){ msg.textContent = 'กรุณากรอกชื่อที่จะให้ปรากฏบนการ์ด'; document.getElementById('cardname').focus(); return; }
+
+  if (document.getElementById('d1').checked && document.getElementById('addr').value.trim().length < 10){
+    msg.textContent = 'กรุณากรอกที่อยู่จัดส่งให้ครบถ้วน'; document.getElementById('addr').focus(); return;
+  }
+
+  var payload = {
+    name: name,
+    attend: document.querySelector('input[name=attend]:checked').value,
+    count: document.getElementById('count').value,
+    cardname: cardname,
+    deliver: document.querySelector('input[name=deliver]:checked').value,
+    addr: document.getElementById('addr').value.trim(),
+    tel: document.getElementById('tel').value.trim(),
+    wish: document.getElementById('wish').value.trim(),
+    hp: document.getElementById('hp').value
+  };
+
+  var btn = document.getElementById('send');
+  btn.disabled = true; btn.textContent = 'กำลังส่ง…';
+
+  google.script.run.withSuccessHandler(function(){
+    document.getElementById('rsvp').classList.add('hide');
+    document.getElementById('done').classList.remove('hide');
+    window.scrollTo(0,0);
+  }).withFailureHandler(function(err){
+    btn.disabled = false; btn.textContent = 'ส่งคำตอบ';
+    msg.textContent = (err && err.message) ? err.message : 'ส่งไม่สำเร็จ กรุณาลองใหม่อีกครั้ง';
+  }).submitRsvp(payload);
+};
+
+var on = false;
+document.getElementById('sound').onclick = function(){
+  on = !on;
+  document.getElementById('sx1').style.display = on ? 'none' : '';
+  document.getElementById('sx2').style.display = on ? 'none' : '';
+  this.setAttribute('aria-label', on ? 'Turn music off' : 'Turn music on');
+};
+</script>
+</body>
+</html>
