@@ -490,6 +490,7 @@ document.querySelectorAll('input[name=keepsake]').forEach(function(r){
   r.onchange = updateMailVisibility;
 });
 mailCheckbox.onchange = function(){ grpAddr.style.display = this.checked ? '' : 'none'; };
+updateMailVisibility();
 
 document.getElementById('rsvp').onsubmit = function(e){
   e.preventDefault();
