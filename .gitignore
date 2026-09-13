@@ -2,4 +2,5 @@
 .clasprc.json
 node_modules/
 pic/
+music/
 .DS_Store

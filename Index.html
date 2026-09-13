@@ -235,6 +235,9 @@ input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:
 </head>
 <body>
 
+<audio id="bgm" loop preload="none">
+  <source src="https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/bgm.mp3" type="audio/mpeg">
+</audio>
 <button id="sound" aria-label="Turn music on">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
     <path d="M11 5 6 9H3v6h3l5 4z"/><path id="sx1" d="m17 9 4 6"/><path id="sx2" d="m21 9-4 6"/>
@@ -507,12 +510,29 @@ document.getElementById('rsvp').onsubmit = function(e){
   }).submitRsvp(payload);
 };
 
-var on = false;
-document.getElementById('sound').onclick = function(){
-  on = !on;
-  document.getElementById('sx1').style.display = on ? 'none' : '';
-  document.getElementById('sx2').style.display = on ? 'none' : '';
-  this.setAttribute('aria-label', on ? 'Turn music off' : 'Turn music on');
+var bgm = document.getElementById('bgm');
+var soundBtn = document.getElementById('sound');
+bgm.volume = 0.4;
+bgm.addEventListener('error', function(){ soundBtn.style.display = 'none'; }, true);
+
+var playing = false;
+soundBtn.onclick = function(){
+  if (!playing) {
+    bgm.play().then(function(){
+      playing = true;
+      document.getElementById('sx1').style.display = 'none';
+      document.getElementById('sx2').style.display = 'none';
+      soundBtn.setAttribute('aria-label', 'Turn music off');
+    }).catch(function(){
+      soundBtn.style.display = 'none';
+    });
+  } else {
+    bgm.pause();
+    playing = false;
+    document.getElementById('sx1').style.display = '';
+    document.getElementById('sx2').style.display = '';
+    soundBtn.setAttribute('aria-label', 'Turn music on');
+  }
 };
 </script>
 </body>
