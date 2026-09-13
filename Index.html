@@ -384,24 +384,34 @@ input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:
 var cover = document.getElementById('cover');
 var view  = document.getElementById('rsvp-view');
 
-if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  document.querySelectorAll('.split__photo').forEach(function(photo){
-    var slides = photo.querySelectorAll('.slide');
-    if (slides.length < 2) return;
-    var i = 0;
-    setInterval(function(){
-      slides[i].classList.remove('active');
-      i = (i + 1) % slides.length;
-      slides[i].classList.add('active');
-    }, 5000);
-  });
+var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var slideTimers = new WeakMap();
+
+function startSlideshow(photo){
+  if (!photo || reduceMotion) return;
+  var slides = photo.querySelectorAll('.slide');
+  if (slides.length < 2) return;
+  var existing = slideTimers.get(photo);
+  if (existing) clearInterval(existing);
+  var i = 0;
+  slides.forEach(function(s, idx){ if (s.classList.contains('active')) i = idx; });
+  var id = setInterval(function(){
+    slides[i].classList.remove('active');
+    i = (i + 1) % slides.length;
+    slides[i].classList.add('active');
+  }, 5000);
+  slideTimers.set(photo, id);
 }
+
+document.querySelectorAll('.split__photo').forEach(startSlideshow);
 
 document.getElementById('go').onclick = function(){
   cover.style.display = 'none'; view.classList.add('on'); window.scrollTo(0,0);
+  startSlideshow(view.querySelector('.split__photo'));
 };
 document.getElementById('back').onclick = function(){
   view.classList.remove('on'); cover.style.display = ''; window.scrollTo(0,0);
+  startSlideshow(cover.querySelector('.split__photo'));
 };
 document.getElementById('restart').onclick = function(){
   document.getElementById('rsvp').reset();
@@ -414,6 +424,7 @@ document.getElementById('restart').onclick = function(){
   document.getElementById('done').classList.add('hide');
   document.getElementById('rsvp').classList.remove('hide');
   view.classList.remove('on'); cover.style.display = ''; window.scrollTo(0,0);
+  startSlideshow(cover.querySelector('.split__photo'));
 };
 
 var VENUE_MAPS_URL = 'https://www.google.com/maps/place/Ava+Trivi+Studio/@13.9176096,100.446719,1069m/data=!3m2!1e3!4b1!4m6!3m5!1s0x30e285caf7b4da1b:0xf0eccb2dcce3cc8d!8m2!3d13.9176044!4d100.4492939!16s%2Fg%2F11g2kl9f6m!5m1!1e1?entry=ttu&g_ep=EgoyMDI2MDkwOS4wIKXMDSoASAFQAw%3D%3D';
@@ -481,7 +492,9 @@ document.getElementById('rsvp').onsubmit = function(e){
 
   google.script.run.withSuccessHandler(function(){
     document.getElementById('done-msg').innerHTML = attending ? DONE_MSG_ATTENDING : DONE_MSG_NOT_ATTENDING;
-    document.querySelector('#rsvp-view .split__photo').classList.replace('photo--rsvp', 'photo--thankyou');
+    var rsvpPhoto = document.querySelector('#rsvp-view .split__photo');
+    rsvpPhoto.classList.replace('photo--rsvp', 'photo--thankyou');
+    startSlideshow(rsvpPhoto);
     document.getElementById('rsvp').classList.add('hide');
     document.getElementById('done').classList.remove('hide');
     window.scrollTo(0,0);
