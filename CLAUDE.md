@@ -142,7 +142,7 @@ rsvp/
 ## รูปภาพและเพลง
 
 ### รูป
-- ใช้ 3 รูป: รูปหน้าปก (`cover`), รูปหน้าฟอร์ม (`rsvp`, แสดงเฉพาะบนเดสก์ท็อป), รูปหน้า Thank you (`thankyou`, แสดงเฉพาะบนเดสก์ท็อปเหมือนกัน — สลับมาจากรูป `rsvp` ตอนส่งฟอร์มสำเร็จ)
+- ใช้ 3 จุด (`cover`, `rsvp`, `thankyou`) — รูปหน้าฟอร์มและหน้า Thank you แสดงบนทุกขนาดจอแล้ว (มือถือก็มีรูปด้วย ไม่ใช่แค่เดสก์ท็อปเหมือนเดิม) **แต่ละจุดมีรูป 2 ใบสลับกันแบบ crossfade ทุก 5 วินาที** (ตั้งชื่อไฟล์ `<ชื่อ>` กับ `<ชื่อ>-b` เช่น `cover.webp`/`cover-b.webp`) รวมเป็น 6 คู่ภาพ (1x+2x) ต่อโปรเจกต์ ไม่ใช่ 3 — ดูหัวข้อ "สไลด์โชว์รูป" ด้านล่างก่อนเพิ่ม/เปลี่ยนรูปอีก
 - ย่อกว้างสุด 1200px แปลง WebP **ไฟล์ละไม่เกิน 250KB** เตรียม JPG สำรอง
 - ใส่ `width`/`height` ในแท็กเสมอ กัน layout กระตุก
 - **น้ำหนักหน้าเว็บรวมไม่เกิน 1.2MB** ไม่นับเพลง ถ้าเกินให้ตัดรูป
@@ -180,6 +180,14 @@ cwebp -q 72 assets-src/cover-2x-src.jpg -o assets-src/cover@2x.webp
 
 ### หน้า Thank you มีรูปพื้นหลังของตัวเอง (`.photo--thankyou`)
 สลับจาก `.photo--rsvp` เป็น `.photo--thankyou` ด้วย JS ตอน `submitRsvp` สำเร็จ (`classList.replace('photo--rsvp','photo--thankyou')`) — เพื่อให้ animation `slideInRight` เล่นซ้ำตอนสลับรูป **animation ต้องผูกกับ selector เฉพาะคลาสรูป** (`#rsvp-view.on .photo--rsvp` / `#rsvp-view.on .photo--thankyou` แยกกัน) ห้ามผูกกับ `.split__photo` เฉยๆ เพราะแบบนั้น animation จะไม่ retrigger ตอนสลับคลาส (คลาสยังแมตช์ selector เดิมต่อเนื่อง ไม่มีการเปลี่ยนค่า computed animation-name)
+
+### สไลด์โชว์รูป — แต่ละจุดมี 2 ภาพสลับกันทุก 5 วิ
+โครงสร้าง: ในแต่ละ `.split__photo` มี `<div class="slide slide--a active">`/`<div class="slide slide--b">` เป็นลูกตัวแรกๆ (ก่อน `.overlay`) แต่ละ `.slide` เป็น `position:absolute;inset:0` ตั้ง `background-image` แยกกันผ่าน selector `.photo--cover .slide--a` / `.photo--cover .slide--b` เป็นต้น (ไม่ได้ตั้ง background-image ที่ตัว `.photo--cover` เองแล้วเหมือนก่อนหน้านี้) สลับด้วย JS ทุก 5000ms โดยเพิ่ม/ลบคลาส `.active` (มี `transition:opacity` ทำให้เฟดเข้าออก)
+
+- **`.split__photo::after` (gradient overlay) ต้องมี `z-index:1` เสมอ** ไม่งั้น slide ใหม่จะวาดทับ gradient (เจอมาแล้วตอนทำรอบแรก)
+- JS เช็ค `prefers-reduced-motion` ก่อนเริ่ม `setInterval` เลย — ถ้า reduce ไว้จะไม่มีสไลด์โชว์เกิดขึ้นเลย (ไม่ใช่แค่ตัด transition เฉยๆ)
+- `#rsvp-view .split__photo` ใช้ร่วมกันทั้งหน้าฟอร์มและหน้า Thank you ตัว interval เดียวรันตลอด ไม่ต้อง restart ตอนสลับ `.photo--rsvp`↔`.photo--thankyou` — พอสลับคลาสฝั่งพ่อ `background-image` ของ slide ที่กำลัง active จะเปลี่ยนตามทันที (ไม่มี fade ตอนสลับพอดี ยอมรับได้)
+- เพิ่ม/เปลี่ยนรูปคู่ไหนต้องทำสูตรย่อรูปให้ครบทั้ง `<ชื่อ>` และ `<ชื่อ>-b` (1x + 2x ทั้งคู่ = 4 ไฟล์ต่อจุด) แล้วเพิ่ม CSS rule คู่ `.photo--X .slide--a`/`.photo--X .slide--b` ทั้งใน base และใน `@media (min-width:900px)`
 
 ### เพลง
 - **autoplay ที่มีเสียงถูกเบราว์เซอร์มือถือบล็อกทั้งหมด ห้ามพยายามหลบ** ถ้าเขียนโค้ดที่พยายาม autoplay แล้วอ้างว่าใช้ได้ ถือว่าผิด

@@ -34,7 +34,7 @@ h1,h2{margin:0;font-weight:500;line-height:1.3}
 .split{min-height:100svh;display:flex;flex-direction:column}
 .split__photo{position:relative;flex:0 0 auto;height:56svh;
   background-position:center 30%;background-size:cover;background-repeat:no-repeat}
-.split__photo::after{content:"";position:absolute;inset:0;
+.split__photo::after{content:"";position:absolute;inset:0;z-index:1;
   background:linear-gradient(180deg,rgba(78,62,60,.03) 0%,rgba(78,62,60,.16) 58%,rgba(78,62,60,.40) 100%)}
 .split__panel{position:relative;flex:1 1 auto;overflow:hidden;z-index:1;
   background:linear-gradient(175deg,#E9F0F7 0%,#FAEFEC 42%,var(--cream) 78%)}
@@ -55,7 +55,11 @@ h1,h2{margin:0;font-weight:500;line-height:1.3}
 #rsvp-view.on .sheet{animation:riseIn .6s ease .12s both}
 .done:not(.hide){animation:riseIn .6s ease both}
 
-.photo--cover{
+.slide{position:absolute;inset:0;background-position:center 30%;background-size:cover;
+  background-repeat:no-repeat;opacity:0;transition:opacity 1.4s ease}
+.slide.active{opacity:1}
+
+.photo--cover .slide--a{
   background-image:url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/cover.webp");
   background-image:-webkit-image-set(
     url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/cover.webp") 1x,
@@ -64,7 +68,16 @@ h1,h2{margin:0;font-weight:500;line-height:1.3}
     url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/cover.webp") 1x,
     url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/cover@2x.webp") 2x);
 }
-.photo--rsvp{
+.photo--cover .slide--b{
+  background-image:url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/cover-b.webp");
+  background-image:-webkit-image-set(
+    url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/cover-b.webp") 1x,
+    url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/cover-b@2x.webp") 2x);
+  background-image:image-set(
+    url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/cover-b.webp") 1x,
+    url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/cover-b@2x.webp") 2x);
+}
+.photo--rsvp .slide--a{
   background-image:url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/rsvp.webp?v=2");
   background-image:-webkit-image-set(
     url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/rsvp.webp?v=2") 1x,
@@ -73,7 +86,16 @@ h1,h2{margin:0;font-weight:500;line-height:1.3}
     url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/rsvp.webp?v=2") 1x,
     url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/rsvp@2x.webp?v=2") 2x);
 }
-.photo--thankyou{
+.photo--rsvp .slide--b{
+  background-image:url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/rsvp-b.webp");
+  background-image:-webkit-image-set(
+    url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/rsvp-b.webp") 1x,
+    url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/rsvp-b@2x.webp") 2x);
+  background-image:image-set(
+    url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/rsvp-b.webp") 1x,
+    url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/rsvp-b@2x.webp") 2x);
+}
+.photo--thankyou .slide--a{
   background-image:url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/thankyou.webp");
   background-image:-webkit-image-set(
     url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/thankyou.webp") 1x,
@@ -81,6 +103,15 @@ h1,h2{margin:0;font-weight:500;line-height:1.3}
   background-image:image-set(
     url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/thankyou.webp") 1x,
     url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/thankyou@2x.webp") 2x);
+}
+.photo--thankyou .slide--b{
+  background-image:url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/thankyou-b.webp");
+  background-image:-webkit-image-set(
+    url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/thankyou-b.webp") 1x,
+    url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/thankyou-b@2x.webp") 2x);
+  background-image:image-set(
+    url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/thankyou-b.webp") 1x,
+    url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/thankyou-b@2x.webp") 2x);
 }
 
 .overlay{position:absolute;left:0;right:0;bottom:26px;padding:0 28px;z-index:2;color:#fff;text-align:center}
@@ -183,9 +214,12 @@ input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:
 @media (min-width:900px){
   .split{flex-direction:row}
   .split__photo{flex:0 0 52%;height:100svh;align-self:flex-start;position:sticky;top:0}
-  .photo--cover{background-image:url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/cover@2x.webp")}
-  .photo--rsvp{background-image:url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/rsvp@2x.webp?v=2")}
-  .photo--thankyou{background-image:url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/thankyou@2x.webp")}
+  .photo--cover .slide--a{background-image:url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/cover@2x.webp")}
+  .photo--cover .slide--b{background-image:url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/cover-b@2x.webp")}
+  .photo--rsvp .slide--a{background-image:url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/rsvp@2x.webp?v=2")}
+  .photo--rsvp .slide--b{background-image:url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/rsvp-b@2x.webp")}
+  .photo--thankyou .slide--a{background-image:url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/thankyou@2x.webp")}
+  .photo--thankyou .slide--b{background-image:url("https://cdn.jsdelivr.net/gh/ppuvitt/poom-kanan-rsvp@main/assets-src/thankyou-b@2x.webp")}
   #rsvp-view .split__photo{display:block;background-position:center 35%}
   #rsvp-view .overlay{bottom:52px}
   .split__panel{flex:1 1 48%;min-height:100svh}
@@ -207,6 +241,8 @@ input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:
 <!-- ================= หน้าที่ 1 ================= -->
 <section id="cover" class="split">
   <div class="split__photo photo--cover">
+    <div class="slide slide--a active"></div>
+    <div class="slide slide--b"></div>
     <div class="overlay"><span class="script">Ka-nan &amp; Poom</span></div>
   </div>
 
@@ -250,6 +286,8 @@ input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:
 <!-- ================= หน้าที่ 2 ================= -->
 <section id="rsvp-view" class="split">
   <div class="split__photo photo--rsvp">
+    <div class="slide slide--a active"></div>
+    <div class="slide slide--b"></div>
     <div class="overlay"><span class="caps">Ka-nan &amp; Poom · 27.12.2026</span></div>
     <div class="scroll-hint" aria-hidden="true">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
@@ -345,6 +383,19 @@ input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:
 <script>
 var cover = document.getElementById('cover');
 var view  = document.getElementById('rsvp-view');
+
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.querySelectorAll('.split__photo').forEach(function(photo){
+    var slides = photo.querySelectorAll('.slide');
+    if (slides.length < 2) return;
+    var i = 0;
+    setInterval(function(){
+      slides[i].classList.remove('active');
+      i = (i + 1) % slides.length;
+      slides[i].classList.add('active');
+    }, 5000);
+  });
+}
 
 document.getElementById('go').onclick = function(){
   cover.style.display = 'none'; view.classList.add('on'); window.scrollTo(0,0);
