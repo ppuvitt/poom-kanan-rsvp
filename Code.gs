@@ -85,6 +85,11 @@ function submitRsvp(form) {
         throw new Error('กรุณากรอกเบอร์โทรให้ถูกต้อง');
       }
     }
+  } else {
+    deliver = String(form.deliver || '').trim().slice(0, 20);
+    if (['สะดวกรับการ์ด', 'ไม่สะดวกรับการ์ด'].indexOf(deliver) === -1) {
+      throw new Error('กรุณาเลือกว่าสะดวกรับการ์ดที่ระลึกไหม');
+    }
   }
 
   var wish = String(form.wish || '').trim().slice(0, 500);

@@ -341,7 +341,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:
 
         <div id="grp-attending">
           <div id="grp-count" class="field">
-            <label for="count">มาด้วยกันกี่ท่าน (นับรวมท่าน)</label>
+            <label for="count">มีผู้ติดตามมาด้วยกันกี่ท่าน (นับรวมท่าน)</label>
             <input type="number" id="count" min="1" max="10" value="1" inputmode="numeric">
           </div>
 
@@ -369,6 +369,16 @@ input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:
               <label for="tel">เบอร์โทร <span class="req">*</span></label>
               <input type="tel" id="tel" inputmode="tel" placeholder="08X-XXX-XXXX">
               <p class="hint">เผื่อไปรษณีย์ติดต่อไม่ได้</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="grp-not-attending" style="display:none">
+          <div class="field">
+            <label>สะดวกรับการ์ดไว้เป็นที่ระลึกไหม <span class="req">*</span></label>
+            <div class="choice">
+              <input type="radio" id="k1" name="keepsake" value="สะดวกรับการ์ด"><label for="k1">สะดวก</label>
+              <input type="radio" id="k2" name="keepsake" value="ไม่สะดวกรับการ์ด"><label for="k2">ไม่สะดวก</label>
             </div>
           </div>
         </div>
@@ -429,6 +439,7 @@ document.getElementById('back').onclick = function(){
 document.getElementById('restart').onclick = function(){
   document.getElementById('rsvp').reset();
   document.getElementById('grp-attending').style.display = '';
+  document.getElementById('grp-not-attending').style.display = 'none';
   document.getElementById('grp-addr').style.display = '';
   document.getElementById('msg').textContent = '';
   var sendBtn = document.getElementById('send');
@@ -452,9 +463,14 @@ var DONE_MSG_ATTENDING = 'บันทึกคำตอบของท่าน
 var DONE_MSG_NOT_ATTENDING = 'ไม่เป็นไรเลยค่ะ/ครับ ขอบคุณที่สละเวลาตอบกลับมานะคะ/ครับ 🤍<br>ไว้เจอกันใหม่โอกาสหน้านะคะ/ครับ';
 
 var grpAttending = document.getElementById('grp-attending');
+var grpNotAttending = document.getElementById('grp-not-attending');
 var grpAddr  = document.getElementById('grp-addr');
 document.querySelectorAll('input[name=attend]').forEach(function(r){
-  r.onchange = function(){ grpAttending.style.display = document.getElementById('a3').checked ? 'none' : ''; };
+  r.onchange = function(){
+    var notAttending = document.getElementById('a3').checked;
+    grpAttending.style.display = notAttending ? 'none' : '';
+    grpNotAttending.style.display = notAttending ? '' : 'none';
+  };
 });
 document.querySelectorAll('input[name=deliver]').forEach(function(r){
   r.onchange = function(){ grpAddr.style.display = document.getElementById('d1').checked ? '' : 'none'; };
@@ -485,6 +501,10 @@ document.getElementById('rsvp').onsubmit = function(e){
       tel = document.getElementById('tel').value.trim();
       if (addr.length < 10){ msg.textContent = 'กรุณากรอกที่อยู่จัดส่งให้ครบถ้วน'; document.getElementById('addr').focus(); return; }
     }
+  } else {
+    var keepsake = document.querySelector('input[name=keepsake]:checked');
+    if (!keepsake){ msg.textContent = 'กรุณาเลือกว่าสะดวกรับการ์ดที่ระลึกไหม'; return; }
+    deliver = keepsake.value;
   }
 
   var payload = {
