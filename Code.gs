@@ -64,24 +64,25 @@ function submitRsvp(form) {
 
   if (attend === 'สะดวกร่วมงาน') {
     count = Math.max(1, Math.min(10, parseInt(form.count, 10) || 1));
-
-    var wantsMail = !!form.mail;
-    deliver = wantsMail ? 'ส่งไปรษณีย์' : 'ไม่ต้องส่งไปรษณีย์';
-
-    if (wantsMail) {
-      addr = String(form.addr || '').trim().slice(0, 500);
-      tel = String(form.tel || '').trim().slice(0, 20);
-      if (addr.length < 10) {
-        throw new Error('กรุณากรอกที่อยู่จัดส่งให้ครบถ้วน');
-      }
-      if (tel.length < 9) {
-        throw new Error('กรุณากรอกเบอร์โทรให้ถูกต้อง');
-      }
-    }
+    deliver = form.mail ? 'ส่งไปรษณีย์' : 'ไม่ต้องส่งไปรษณีย์';
   } else {
     deliver = String(form.deliver || '').trim().slice(0, 20);
     if (['สะดวกรับการ์ด', 'ไม่สะดวกรับการ์ด'].indexOf(deliver) === -1) {
       throw new Error('กรุณาเลือกว่าสะดวกรับการ์ดที่ระลึกไหม');
+    }
+  }
+
+  // ที่อยู่/เบอร์: ต้องกรอกก็ต่อเมื่อขอให้ส่งไปรษณีย์จริง (ทั้งกลุ่มสะดวกร่วมงานและกลุ่มไม่สะดวกร่วมงานที่ยังอยากได้การ์ด)
+  var wantsMail = (attend === 'สะดวกร่วมงาน' && !!form.mail) ||
+                  (attend === 'ไม่สะดวกร่วมงาน' && deliver === 'สะดวกรับการ์ด' && !!form.mail);
+  if (wantsMail) {
+    addr = String(form.addr || '').trim().slice(0, 500);
+    tel = String(form.tel || '').trim().slice(0, 20);
+    if (addr.length < 10) {
+      throw new Error('กรุณากรอกที่อยู่จัดส่งให้ครบถ้วน');
+    }
+    if (tel.length < 9) {
+      throw new Error('กรุณากรอกเบอร์โทรให้ถูกต้อง');
     }
   }
 
