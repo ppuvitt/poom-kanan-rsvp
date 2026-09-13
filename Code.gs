@@ -1,11 +1,11 @@
 var SHEET_NAME = 'RSVP';
 var COLUMNS = [
   'เวลาบันทึก',
-  'ชื่อของท่าน',
+  'ชื่อ-นามสกุลของท่าน',
+  'ชื่อเล่น',
   'เป็นแขกฝั่งเจ้าบ่าวหรือเจ้าสาว',
   'ท่านจะมาร่วมงานหรือไม่',
   'มาด้วยกันกี่ท่าน',
-  'ชื่อที่ต้องการให้ปรากฏบนการ์ด',
   'ท่านสะดวกรับการ์ดแบบใด',
   'ที่อยู่จัดส่ง',
   'เบอร์โทร',
@@ -43,11 +43,12 @@ function submitRsvp(form) {
   }
 
   var name = String(form.name || '').trim().slice(0, 100);
+  var nickname = String(form.nickname || '').trim().slice(0, 50);
   var side = String(form.side || '').trim().slice(0, 20);
   var attend = String(form.attend || '').trim().slice(0, 20);
 
   if (name.length < 2) {
-    throw new Error('กรุณากรอกชื่อของท่าน');
+    throw new Error('กรุณากรอกชื่อ-นามสกุลของท่าน');
   }
   if (['ฝั่งเจ้าบ่าว', 'ฝั่งเจ้าสาว'].indexOf(side) === -1) {
     throw new Error('กรุณาเลือกฝั่งแขก');
@@ -57,25 +58,17 @@ function submitRsvp(form) {
   }
 
   var count = '';
-  var cardname = '';
   var deliver = '';
   var addr = '';
   var tel = '';
 
   if (attend === 'สะดวกร่วมงาน') {
-    cardname = String(form.cardname || '').trim().slice(0, 150);
-    if (cardname.length < 2) {
-      throw new Error('กรุณากรอกชื่อที่จะให้ปรากฏบนการ์ด');
-    }
-
-    deliver = String(form.deliver || '').trim().slice(0, 20);
-    if (['ส่งไปรษณีย์', 'รับด้วยมือ', 'ไม่ต้องส่ง'].indexOf(deliver) === -1) {
-      throw new Error('กรุณาเลือกวิธีรับการ์ด');
-    }
-
     count = Math.max(1, Math.min(10, parseInt(form.count, 10) || 1));
 
-    if (deliver === 'ส่งไปรษณีย์') {
+    var wantsMail = !!form.mail;
+    deliver = wantsMail ? 'ส่งไปรษณีย์' : 'ไม่ต้องส่งไปรษณีย์';
+
+    if (wantsMail) {
       addr = String(form.addr || '').trim().slice(0, 500);
       tel = String(form.tel || '').trim().slice(0, 20);
       if (addr.length < 10) {
@@ -98,7 +91,7 @@ function submitRsvp(form) {
   lock.waitLock(10000);
   try {
     var sheet = getSheet_();
-    sheet.appendRow([new Date(), name, side, attend, count, cardname, deliver, addr, tel, wish]);
+    sheet.appendRow([new Date(), name, nickname, side, attend, count, deliver, addr, tel, wish]);
   } finally {
     lock.releaseLock();
   }

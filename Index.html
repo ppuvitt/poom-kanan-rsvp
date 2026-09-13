@@ -194,6 +194,8 @@ input::placeholder,textarea::placeholder{color:#C6B2AF}
 input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:0 0 0 3px rgba(126,156,188,.16)}
 .hint{font-size:13.5px;color:var(--ink-soft);opacity:.9;margin:7px 0 0;line-height:1.65}
 
+.checkbox-field label{display:flex;align-items:center;gap:10px;font-size:15.5px;color:var(--ink);cursor:pointer;margin:0}
+.checkbox-field input[type=checkbox]{width:19px;height:19px;flex:none;accent-color:var(--gold)}
 .choice{display:flex;gap:8px;flex-wrap:wrap}
 .choice input{position:absolute;opacity:0;width:1px;height:1px}
 .choice label{flex:1 1 96px;margin:0;text-align:center;background:#fff;
@@ -318,8 +320,13 @@ input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:
         <input type="text" id="hp" name="hp" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px" aria-hidden="true">
 
         <div class="field">
-          <label for="name">ชื่อของท่าน <span class="req">*</span></label>
+          <label for="name">ชื่อ-นามสกุลของท่าน <span class="req">*</span></label>
           <input type="text" id="name" autocomplete="name">
+        </div>
+
+        <div class="field">
+          <label for="nickname">ชื่อเล่น</label>
+          <input type="text" id="nickname" autocomplete="nickname">
         </div>
 
         <div class="field">
@@ -345,22 +352,11 @@ input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:
             <input type="number" id="count" min="1" max="10" value="1" inputmode="numeric">
           </div>
 
-          <div class="field">
-            <label for="cardname">ชื่อที่ต้องการให้ปรากฏบนการ์ด <span class="req">*</span></label>
-            <input type="text" id="cardname" placeholder="เช่น คุณสมชาย–คุณวันเพ็ญ ศรีสุข">
-            <p class="hint">ใส่คำนำหน้า ยศ และชื่อคู่สมรสให้ครบ เราจะพิมพ์ลงการ์ดตามนี้ทุกตัวอักษร</p>
+          <div class="field checkbox-field">
+            <label for="mail"><input type="checkbox" id="mail"> ต้องการให้ส่งการ์ดทางไปรษณีย์</label>
           </div>
 
-          <div class="field">
-            <label>ท่านสะดวกรับการ์ดแบบใด <span class="req">*</span></label>
-            <div class="choice">
-              <input type="radio" id="d1" name="deliver" value="ส่งไปรษณีย์" checked><label for="d1">ส่งไปรษณีย์</label>
-              <input type="radio" id="d2" name="deliver" value="รับด้วยมือ"><label for="d2">รับด้วยมือ</label>
-              <input type="radio" id="d3" name="deliver" value="ไม่ต้องส่ง"><label for="d3">ไม่ต้องส่ง</label>
-            </div>
-          </div>
-
-          <div id="grp-addr">
+          <div id="grp-addr" style="display:none">
             <div class="field">
               <label for="addr">ที่อยู่จัดส่ง <span class="req">*</span></label>
               <textarea id="addr" placeholder="ชื่อผู้รับ / บ้านเลขที่ / ถนน / แขวง / เขต / จังหวัด / รหัสไปรษณีย์"></textarea>
@@ -440,7 +436,7 @@ document.getElementById('restart').onclick = function(){
   document.getElementById('rsvp').reset();
   document.getElementById('grp-attending').style.display = '';
   document.getElementById('grp-not-attending').style.display = 'none';
-  document.getElementById('grp-addr').style.display = '';
+  document.getElementById('grp-addr').style.display = 'none';
   document.getElementById('msg').textContent = '';
   var sendBtn = document.getElementById('send');
   sendBtn.disabled = false; sendBtn.textContent = 'ส่งคำตอบ';
@@ -472,31 +468,26 @@ document.querySelectorAll('input[name=attend]').forEach(function(r){
     grpNotAttending.style.display = notAttending ? '' : 'none';
   };
 });
-document.querySelectorAll('input[name=deliver]').forEach(function(r){
-  r.onchange = function(){ grpAddr.style.display = document.getElementById('d1').checked ? '' : 'none'; };
-});
+document.getElementById('mail').onchange = function(){ grpAddr.style.display = this.checked ? '' : 'none'; };
 
 document.getElementById('rsvp').onsubmit = function(e){
   e.preventDefault();
   var msg = document.getElementById('msg'); msg.textContent = '';
 
   var name = document.getElementById('name').value.trim();
-  if (name.length < 2){ msg.textContent = 'กรุณากรอกชื่อของท่าน'; document.getElementById('name').focus(); return; }
+  if (name.length < 2){ msg.textContent = 'กรุณากรอกชื่อ-นามสกุลของท่าน'; document.getElementById('name').focus(); return; }
 
   var side = document.getElementById('side').value;
   if (!side){ msg.textContent = 'กรุณาเลือกฝั่งแขก'; document.getElementById('side').focus(); return; }
 
   var attending = document.getElementById('a1').checked;
-  var count = '', cardname = '', deliver = '', addr = '', tel = '';
+  var count = '', deliver = '', addr = '', tel = '', mail = false;
 
   if (attending) {
-    cardname = document.getElementById('cardname').value.trim();
-    if (cardname.length < 2){ msg.textContent = 'กรุณากรอกชื่อที่จะให้ปรากฏบนการ์ด'; document.getElementById('cardname').focus(); return; }
-
     count = document.getElementById('count').value;
-    deliver = document.querySelector('input[name=deliver]:checked').value;
+    mail = document.getElementById('mail').checked;
 
-    if (document.getElementById('d1').checked){
+    if (mail){
       addr = document.getElementById('addr').value.trim();
       tel = document.getElementById('tel').value.trim();
       if (addr.length < 10){ msg.textContent = 'กรุณากรอกที่อยู่จัดส่งให้ครบถ้วน'; document.getElementById('addr').focus(); return; }
@@ -509,10 +500,11 @@ document.getElementById('rsvp').onsubmit = function(e){
 
   var payload = {
     name: name,
+    nickname: document.getElementById('nickname').value.trim(),
     side: side,
     attend: document.querySelector('input[name=attend]:checked').value,
     count: count,
-    cardname: cardname,
+    mail: mail,
     deliver: deliver,
     addr: addr,
     tel: tel,
