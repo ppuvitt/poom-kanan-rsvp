@@ -5,10 +5,9 @@ var COLUMNS = [
   'ชื่อเล่น',
   'เป็นแขกฝั่งเจ้าบ่าวหรือเจ้าสาว',
   'ท่านจะมาร่วมงานหรือไม่',
-  'มาด้วยกันกี่ท่าน',
-  'ท่านสะดวกรับการ์ดแบบใด',
-  'ที่อยู่จัดส่ง',
-  'เบอร์โทร',
+  'มีผู้ติดตามมาด้วยกันกี่ท่าน',
+  'ชื่อผู้ติดตาม',
+  'อาหารที่ทานไม่ได้ / แพ้อาหาร',
   'อยากบอกอะไรบ่าวสาวไหม'
 ];
 
@@ -58,32 +57,13 @@ function submitRsvp(form) {
   }
 
   var count = '';
-  var deliver = '';
-  var addr = '';
-  var tel = '';
+  var companions = '';
+  var allergy = '';
 
   if (attend === 'สะดวกร่วมงาน') {
     count = Math.max(1, Math.min(10, parseInt(form.count, 10) || 1));
-    deliver = form.mail ? 'ส่งไปรษณีย์' : 'ไม่ต้องส่งไปรษณีย์';
-  } else {
-    deliver = String(form.deliver || '').trim().slice(0, 20);
-    if (['สะดวกรับการ์ด', 'ไม่สะดวกรับการ์ด'].indexOf(deliver) === -1) {
-      throw new Error('กรุณาเลือกว่าสะดวกรับการ์ดที่ระลึกไหม');
-    }
-  }
-
-  // ที่อยู่/เบอร์: ต้องกรอกก็ต่อเมื่อขอให้ส่งไปรษณีย์จริง (ทั้งกลุ่มสะดวกร่วมงานและกลุ่มไม่สะดวกร่วมงานที่ยังอยากได้การ์ด)
-  var wantsMail = (attend === 'สะดวกร่วมงาน' && !!form.mail) ||
-                  (attend === 'ไม่สะดวกร่วมงาน' && deliver === 'สะดวกรับการ์ด' && !!form.mail);
-  if (wantsMail) {
-    addr = String(form.addr || '').trim().slice(0, 500);
-    tel = String(form.tel || '').trim().slice(0, 20);
-    if (addr.length < 10) {
-      throw new Error('กรุณากรอกที่อยู่จัดส่งให้ครบถ้วน');
-    }
-    if (tel.length < 9) {
-      throw new Error('กรุณากรอกเบอร์โทรให้ถูกต้อง');
-    }
+    companions = String(form.companions || '').trim().slice(0, 500);
+    allergy = String(form.allergy || '').trim().slice(0, 500);
   }
 
   var wish = String(form.wish || '').trim().slice(0, 500);
@@ -92,7 +72,7 @@ function submitRsvp(form) {
   lock.waitLock(10000);
   try {
     var sheet = getSheet_();
-    sheet.appendRow([new Date(), name, nickname, side, attend, count, deliver, addr, tel, wish]);
+    sheet.appendRow([new Date(), name, nickname, side, attend, count, companions, allergy, wish]);
   } finally {
     lock.releaseLock();
   }
