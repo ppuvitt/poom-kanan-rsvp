@@ -173,7 +173,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:
 .hide{display:none}
 .done{text-align:center;padding:56px 0}
 .done .script{font-size:52px;color:var(--gold-deep);display:block;margin-bottom:16px}
-.done .done-msg{color:var(--ink-soft);font-size:15.5px;margin:0;line-height:1.9}
+.done .done-msg{color:var(--ink-soft);font-size:17.5px;margin:0;line-height:1.85}
 .done .venue{margin:16px 0 0}
 .done .hint{margin-top:14px}
 .done__restart-wrap{text-align:right;margin-top:28px}
@@ -442,14 +442,14 @@ document.getElementById('rsvp').onsubmit = function(e){
   if (!side){ msg.textContent = 'กรุณาเลือกฝั่งแขก'; document.getElementById('side').focus(); return; }
 
   var attending = document.getElementById('a1').checked;
-  var count = '', companions = '', allergy = '';
+  var count = '', companions = [], allergy = '';
 
   if (attending) {
     count = document.getElementById('count').value;
     companions = Array.prototype.map.call(
       grpCompanions.querySelectorAll('.companion-name'),
       function(inp){ return inp.value.trim(); }
-    ).filter(function(v){ return v; }).join(', ');
+    ).filter(function(v){ return v; });
     allergy = document.getElementById('allergy').value.trim();
   }
 

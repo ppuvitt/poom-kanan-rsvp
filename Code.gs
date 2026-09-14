@@ -6,7 +6,11 @@ var COLUMNS = [
   'เป็นแขกฝั่งเจ้าบ่าวหรือเจ้าสาว',
   'ท่านจะมาร่วมงานหรือไม่',
   'มีผู้ติดตามมาด้วยกันกี่ท่าน',
-  'ชื่อผู้ติดตาม',
+  'ชื่อผู้ติดตามคนที่ 1',
+  'ชื่อผู้ติดตามคนที่ 2',
+  'ชื่อผู้ติดตามคนที่ 3',
+  'ชื่อผู้ติดตามคนที่ 4',
+  'ชื่อผู้ติดตามคนที่ 5',
   'อาหารที่ทานไม่ได้ / แพ้อาหาร',
   'อยากบอกอะไรบ่าวสาวไหม'
 ];
@@ -57,12 +61,23 @@ function submitRsvp(form) {
   }
 
   var count = '';
-  var companions = '';
+  var companionCols = ['', '', '', '', ''];
   var allergy = '';
 
   if (attend === 'สะดวกร่วมงาน') {
     count = Math.max(1, Math.min(10, parseInt(form.count, 10) || 1));
-    companions = String(form.companions || '').trim().slice(0, 500);
+
+    var companionsArr = Array.isArray(form.companions) ? form.companions : [];
+    companionsArr = companionsArr
+      .map(function (n) { return String(n || '').trim().slice(0, 100); })
+      .filter(function (n) { return n; });
+
+    // เผื่อไว้ 5 คอลัมน์ในชีต คนที่ 5 เป็นต้นไปยัดรวมกันในคอลัมน์สุดท้าย คั่นด้วย ", "
+    for (var i = 0; i < 4; i++) {
+      companionCols[i] = companionsArr[i] || '';
+    }
+    companionCols[4] = companionsArr.slice(4).join(', ').slice(0, 500);
+
     allergy = String(form.allergy || '').trim().slice(0, 500);
   }
 
@@ -72,7 +87,9 @@ function submitRsvp(form) {
   lock.waitLock(10000);
   try {
     var sheet = getSheet_();
-    sheet.appendRow([new Date(), name, nickname, side, attend, count, companions, allergy, wish]);
+    sheet.appendRow([new Date(), name, nickname, side, attend, count]
+      .concat(companionCols)
+      .concat([allergy, wish]));
   } finally {
     lock.releaseLock();
   }
