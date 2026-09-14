@@ -87,7 +87,7 @@ h1,h2{margin:0;font-weight:500;line-height:1.3}
 /* ---------- หน้าปก ---------- */
 #cover .split__panel{padding:60px 30px 64px;text-align:center;display:flex;flex-direction:column;justify-content:center}
 .date{position:relative;font-size:clamp(19px,5.6vw,23px);color:var(--gold-deep)}
-.date__time{display:block;font-family:"Cinzel",serif;font-size:12.5px;letter-spacing:.16em;color:var(--gold-deep);margin-top:10px}
+.date__time{display:block;font-family:"Cinzel",serif;font-size:15px;letter-spacing:.16em;color:var(--gold-deep);margin-top:10px}
 .date__sub{display:block;font-size:16px;font-style:italic;color:var(--ink);margin-top:10px;letter-spacing:.02em}
 .rule{width:132px;height:1px;margin:24px auto;position:relative;
   background:linear-gradient(90deg,transparent,var(--gold) 22%,var(--sky-deep) 50%,var(--gold) 78%,transparent);opacity:.65}
@@ -156,7 +156,6 @@ select:invalid{color:#C6B2AF}
 textarea{resize:vertical;min-height:84px;line-height:1.75}
 input::placeholder,textarea::placeholder{color:#C6B2AF}
 input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:0 0 0 3px rgba(126,156,188,.16)}
-.hint{font-size:13.5px;color:var(--ink-soft);opacity:.9;margin:7px 0 0;line-height:1.65}
 
 .choice{display:flex;gap:8px;flex-wrap:wrap}
 .choice input{position:absolute;opacity:0;width:1px;height:1px}
@@ -174,8 +173,8 @@ input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:
 .done{text-align:center;padding:56px 0}
 .done .script{font-size:52px;color:var(--gold-deep);display:block;margin-bottom:16px}
 .done .done-msg{color:var(--ink-soft);font-size:17.5px;margin:0;line-height:1.85}
+.done .done-note{color:var(--ink-soft);font-size:17.5px;line-height:1.85;margin:14px 0 0}
 .done .venue{margin:16px 0 0}
-.done .hint{margin-top:14px}
 .done__restart-wrap{text-align:right;margin-top:28px}
 .done__restart{background:none;border:none;border-bottom:1px solid var(--gold);
   font-family:"Cinzel",serif;font-size:12px;letter-spacing:.1em;color:var(--gold-deep);
@@ -397,7 +396,7 @@ var DONE_MSG_ATTENDING = 'บันทึกคำตอบของท่าน
       '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>' +
     '</a>' +
   '</div>' +
-  '<p class="hint">ส่วนกำหนดการโดยละเอียดจะแจ้งให้ทราบใน invitation อีกครั้งนะครับ/คะ</p>';
+  '<p class="done-note">งานจะจัดในช่วงเย็น - ค่ำ ส่วนกำหนดการโดยละเอียดจะแจ้งให้ทราบใน invitation อีกครั้งนะครับ/คะ</p>';
 var DONE_MSG_NOT_ATTENDING = 'ไม่เป็นไรเลยค่ะ/ครับ ขอบคุณที่สละเวลาตอบกลับมานะคะ/ครับ 🤍<br>ไว้เจอกันใหม่โอกาสหน้านะคะ/ครับ';
 
 var grpAttending = document.getElementById('grp-attending');
