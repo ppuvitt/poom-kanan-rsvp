@@ -403,7 +403,11 @@ var grpAttending = document.getElementById('grp-attending');
 var grpCompanions = document.getElementById('grp-companions');
 
 function renderCompanionInputs(){
-  var total = Math.max(1, Math.min(10, parseInt(document.getElementById('count').value, 10) || 1));
+  var countEl = document.getElementById('count');
+  var total = Math.max(1, Math.min(10, parseInt(countEl.value, 10) || 1));
+  // เขียนค่าที่ clamp แล้วกลับเข้าช่อง — ถ้าปล่อยให้ค่าเกิน max=10 ค้างไว้ใน DOM
+  // เบราว์เซอร์จะมองว่าฟอร์ม invalid แล้วเงียบๆ ไม่ยอมยิง submit event เลย (เจอบั๊กจริงตอนทดสอบ)
+  countEl.value = total;
   var need = total - 1; // ไม่นับตัวท่านเอง (ชื่อท่านกรอกไว้แล้วด้านบน)
   var current = grpCompanions.querySelectorAll('input').length;
   var i;
