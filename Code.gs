@@ -67,9 +67,15 @@ function submitRsvp(form) {
   if (attend === 'สะดวกร่วมงาน') {
     count = Math.max(1, Math.min(10, parseInt(form.count, 10) || 1));
 
+    var validRelations = ['คู่สมรส/แฟน', 'เพื่อน', 'ญาติ'];
     var companionsArr = Array.isArray(form.companions) ? form.companions : [];
     companionsArr = companionsArr
-      .map(function (n) { return String(n || '').trim().slice(0, 100); })
+      .map(function (c) {
+        var n = String((c && c.name) || '').trim().slice(0, 100);
+        var r = String((c && c.relation) || '').trim();
+        if (validRelations.indexOf(r) === -1) r = '';
+        return n ? (r ? n + ' (' + r + ')' : n) : '';
+      })
       .filter(function (n) { return n; });
 
     // เผื่อไว้ 5 คอลัมน์ในชีต คนที่ 5 เป็นต้นไปยัดรวมกันในคอลัมน์สุดท้าย คั่นด้วย ", "

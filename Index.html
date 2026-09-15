@@ -153,6 +153,9 @@ select{-webkit-appearance:none;appearance:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238B7573' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 14px center;padding-right:38px}
 select:invalid{color:#C6B2AF}
+.companion-row{display:flex;gap:8px}
+.companion-row .companion-name{flex:1.5;min-width:0}
+.companion-row .companion-relation{flex:1;min-width:0;padding-left:10px;padding-right:30px}
 textarea{resize:vertical;min-height:84px;line-height:1.75}
 input::placeholder,textarea::placeholder{color:#C6B2AF}
 input:focus,textarea:focus{outline:none;border-color:var(--sky-deep);box-shadow:0 0 0 3px rgba(126,156,188,.16)}
@@ -409,13 +412,22 @@ function renderCompanionInputs(){
   // เบราว์เซอร์จะมองว่าฟอร์ม invalid แล้วเงียบๆ ไม่ยอมยิง submit event เลย (เจอบั๊กจริงตอนทดสอบ)
   countEl.value = total;
   var need = total - 1; // ไม่นับตัวท่านเอง (ชื่อท่านกรอกไว้แล้วด้านบน)
-  var current = grpCompanions.querySelectorAll('input').length;
+  var current = grpCompanions.querySelectorAll('.field').length;
   var i;
   if (need > current) {
     for (i = current; i < need; i++) {
       var div = document.createElement('div');
       div.className = 'field';
-      div.innerHTML = '<label>ชื่อผู้ติดตามคนที่ ' + (i + 1) + '</label><input type="text" class="companion-name">';
+      div.innerHTML = '<label>ผู้ติดตามคนที่ ' + (i + 1) + '</label>' +
+        '<div class="companion-row">' +
+          '<input type="text" class="companion-name" placeholder="ชื่อ">' +
+          '<select class="companion-relation">' +
+            '<option value="">สถานะ</option>' +
+            '<option value="คู่สมรส/แฟน">คู่สมรส/แฟน</option>' +
+            '<option value="เพื่อน">เพื่อน</option>' +
+            '<option value="ญาติ">ญาติ</option>' +
+          '</select>' +
+        '</div>';
       grpCompanions.appendChild(div);
     }
   } else if (need < current) {
@@ -450,9 +462,14 @@ document.getElementById('rsvp').onsubmit = function(e){
   if (attending) {
     count = document.getElementById('count').value;
     companions = Array.prototype.map.call(
-      grpCompanions.querySelectorAll('.companion-name'),
-      function(inp){ return inp.value.trim(); }
-    ).filter(function(v){ return v; });
+      grpCompanions.querySelectorAll('.field'),
+      function(row){
+        return {
+          name: row.querySelector('.companion-name').value.trim(),
+          relation: row.querySelector('.companion-relation').value
+        };
+      }
+    ).filter(function(c){ return c.name; });
     allergy = document.getElementById('allergy').value.trim();
   }
 
