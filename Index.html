@@ -407,10 +407,11 @@ var grpCompanions = document.getElementById('grp-companions');
 
 function renderCompanionInputs(){
   var countEl = document.getElementById('count');
-  var total = Math.max(1, Math.min(10, parseInt(countEl.value, 10) || 1));
-  // เขียนค่าที่ clamp แล้วกลับเข้าช่อง — ถ้าปล่อยให้ค่าเกิน max=10 ค้างไว้ใน DOM
-  // เบราว์เซอร์จะมองว่าฟอร์ม invalid แล้วเงียบๆ ไม่ยอมยิง submit event เลย (เจอบั๊กจริงตอนทดสอบ)
-  countEl.value = total;
+  // ใช้ค่า clamp แล้วแค่ "คำนวณ" จำนวนช่องที่ต้องโชว์ ไม่เขียนกลับเข้า countEl ตรงนี้
+  // (เขียนกลับทุกครั้งที่พิมพ์ทำให้ลบเลขบนมือถือไม่ได้ — ลบแล้วค่าว่างชั่วคราวโดนดีดกลับเป็น 1 ทันที
+  // พิมพ์เลขใหม่เลยไปต่อท้ายกลายเป็นเลขสองหลัก เจอบั๊กจริงจากผู้ใช้)
+  var raw = parseInt(countEl.value, 10);
+  var total = isNaN(raw) ? 1 : Math.max(1, Math.min(10, raw));
   var need = total - 1; // ไม่นับตัวท่านเอง (ชื่อท่านกรอกไว้แล้วด้านบน)
   var current = grpCompanions.querySelectorAll('.field').length;
   var i;
@@ -444,6 +445,12 @@ document.querySelectorAll('input[name=attend]').forEach(function(r){
   };
 });
 document.getElementById('count').oninput = renderCompanionInputs;
+document.getElementById('count').onblur = function(){
+  // ตอนออกจากช่องแล้วค่อยดีดค่าที่ผิดช่วง/ว่างให้กลับมาถูกต้อง ไม่ทำตอนพิมพ์อยู่
+  var v = parseInt(this.value, 10);
+  this.value = isNaN(v) ? 1 : Math.max(1, Math.min(10, v));
+  renderCompanionInputs();
+};
 renderCompanionInputs();
 
 document.getElementById('rsvp').onsubmit = function(e){
@@ -460,7 +467,10 @@ document.getElementById('rsvp').onsubmit = function(e){
   var count = '', companions = [], allergy = '';
 
   if (attending) {
-    count = document.getElementById('count').value;
+    var countEl2 = document.getElementById('count');
+    var v2 = parseInt(countEl2.value, 10);
+    countEl2.value = isNaN(v2) ? 1 : Math.max(1, Math.min(10, v2)); // กันเผื่อ blur ไม่ทัน ยังไงก็ต้องถูกช่วงก่อน submit
+    count = countEl2.value;
     companions = Array.prototype.map.call(
       grpCompanions.querySelectorAll('.field'),
       function(row){
